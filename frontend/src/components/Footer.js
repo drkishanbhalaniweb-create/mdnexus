@@ -93,9 +93,18 @@ const Footer = () => {
             <p className="text-white/60 text-sm mb-2">
               Copyright © {currentYear} Military Disability Nexus. All Rights Reserved.
             </p>
-            <p className="text-white/40 text-xs">
+            <p className="text-white/40 text-xs mb-3">
               Professional medical documentation for VA disability claims | Nexus Letters | DBQs | Aid & Attendance
             </p>
+            <div className="flex justify-center space-x-4 text-xs">
+              <Link to="/terms" className="text-white/50 hover:text-white/80 transition-colors">
+                Terms & Conditions
+              </Link>
+              <span className="text-white/30">|</span>
+              <Link to="/privacy" className="text-white/50 hover:text-white/80 transition-colors">
+                Privacy Policy
+              </Link>
+            </div>
           </div>
           <div className="text-center">
             <Link to="/admin/login" className="text-white/20 hover:text-white/40 transition-colors text-xs inline-block">

@@ -21,6 +21,8 @@ const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
 const PaymentCanceled = lazy(() => import('./pages/PaymentCanceled'));
 const TestPayment = lazy(() => import('./pages/TestPayment'));
 const ClaimReadinessReview = lazy(() => import('./pages/ClaimReadinessReview'));
+const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 
 // Lazy load admin panel (separate chunk)
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
@@ -69,6 +71,8 @@ function App() {
           <Route path="payment/canceled" element={<PaymentCanceled />} />
           <Route path="test-payment" element={<TestPayment />} />
           <Route path="claim-readiness-review" element={<ClaimReadinessReview />} />
+          <Route path="terms" element={<TermsAndConditions />} />
+          <Route path="privacy" element={<PrivacyPolicy />} />
         </Route>
 
         {/* Admin Routes */}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CheckCircle, FileText, User, Mail, Phone, MessageSquare, Loader2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import PaymentWrapper from '../components/payment/PaymentWrapper';
 import { supabase } from '../lib/supabase';
@@ -17,6 +18,7 @@ const ClaimReadinessReview = () => {
     serviceTypes: [], // Changed to array for multiple selections
     currentStatus: '',
     additionalInfo: '',
+    acceptedTerms: false,
   });
 
   const SERVICE_TYPES = [
@@ -28,10 +30,10 @@ const ClaimReadinessReview = () => {
   ];
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -286,10 +288,35 @@ const ClaimReadinessReview = () => {
                 />
               </div>
 
+              {/* Terms and Conditions */}
+              <div className="border-t border-slate-200 pt-6">
+                <label className="flex items-start cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="acceptedTerms"
+                    checked={formData.acceptedTerms}
+                    onChange={handleChange}
+                    required
+                    className="mt-1 w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
+                  />
+                  <span className="ml-3 text-sm text-slate-700">
+                    I agree to the{' '}
+                    <Link to="/terms" target="_blank" className="text-blue-600 hover:text-blue-700 underline font-semibold">
+                      Terms and Conditions
+                    </Link>
+                    {' '}and{' '}
+                    <Link to="/privacy" target="_blank" className="text-blue-600 hover:text-blue-700 underline font-semibold">
+                      Privacy Policy
+                    </Link>
+                    {' '}*
+                  </span>
+                </label>
+              </div>
+
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={loading || formData.serviceTypes.length === 0}
+                disabled={loading || formData.serviceTypes.length === 0 || !formData.acceptedTerms}
                 className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg hover:shadow-xl"
               >
                 {loading ? (
