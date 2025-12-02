@@ -1,6 +1,6 @@
 ﻿import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ThumbsUp, ThumbsDown, MessageSquare, User, Clock, ArrowLeft, CheckCircle } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, MessageSquare, User, Clock, ArrowLeft, CheckCircle, Award } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import SEO from '../components/SEO';
 import { toast } from 'sonner';
@@ -29,7 +29,7 @@ const QuestionDetail = () => {
       if (questionError) throw questionError;
       setQuestion(questionData);
       await supabase.from('community_questions').update({ views: (questionData.views || 0) + 1 }).eq('id', questionData.id);
-      const { data: answersData } = await supabase.from('community_answers').select('*').eq('question_id', questionData.id).eq('status', 'published').order('is_best_answer', { ascending: false }).order('upvotes', { ascending: false });
+      const { data: answersData } = await supabase.from('community_answers').select('*').eq('question_id', questionData.id).eq('status', 'published').order('is_expert_answer', { ascending: false }).order('is_best_answer', { ascending: false }).order('upvotes', { ascending: false });
       setAnswers(answersData || []);
     } catch (error) {
       console.error('Error:', error);
@@ -144,9 +144,15 @@ const QuestionDetail = () => {
               ) : (
                 <div className="space-y-4">
                   {answers.map((answer) => (
-                    <div key={answer.id} className={'bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border p-6 ' + (answer.is_best_answer ? 'border-emerald-500 border-2' : 'border-white/40')}>
-                      {answer.is_best_answer && <div className="flex items-center gap-2 text-emerald-600 mb-3"><CheckCircle className="w-5 h-5" /><span className="font-medium">Accepted Answer</span></div>}
-                      <p className="text-slate-700 whitespace-pre-wrap mb-4">{answer.content}</p>
+                    <div key={answer.id} className={'bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border p-6 relative ' + (answer.is_expert_answer ? 'border-amber-400 border-2' : answer.is_best_answer ? 'border-emerald-500 border-2' : 'border-white/40')}>
+                      {answer.is_expert_answer && (
+                        <div className="absolute -top-3 right-4 flex items-center gap-1.5 px-3 py-1 bg-amber-400 text-amber-900 text-sm font-semibold rounded-full shadow-md">
+                          <Award className="w-4 h-4" />
+                          Expert Answer
+                        </div>
+                      )}
+                      {answer.is_best_answer && !answer.is_expert_answer && <div className="flex items-center gap-2 text-emerald-600 mb-3"><CheckCircle className="w-5 h-5" /><span className="font-medium">Accepted Answer</span></div>}
+                      <p className="text-slate-700 whitespace-pre-wrap mb-4 mt-2">{answer.content}</p>
                       <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                         <div className="flex items-center gap-4">
                           <button onClick={() => handleVote('up', 'answer', answer.id, answer.upvotes)} className="flex items-center gap-1 text-slate-500 hover:text-emerald-600 transition-colors"><ThumbsUp className="w-4 h-4" /><span>{answer.upvotes || 0}</span></button>

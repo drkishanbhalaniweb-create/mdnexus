@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { Search, Trash2, Eye, MessageSquare, ThumbsUp, Clock, User, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, Trash2, Eye, MessageSquare, ThumbsUp, Clock, User, ChevronDown, ChevronUp, Send, Award } from 'lucide-react';
 import { toast } from 'sonner';
 
 const AdminCommunity = () => {
@@ -12,8 +12,16 @@ const AdminCommunity = () => {
   const [expandedQuestion, setExpandedQuestion] = useState(null);
   const [answers, setAnswers] = useState({});
   const [deleting, setDeleting] = useState(null);
+  const [expertAnswer, setExpertAnswer] = useState({});
+  const [submittingAnswer, setSubmittingAnswer] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  useEffect(() => { fetchQuestions(); }, [statusFilter]);
+  useEffect(() => { fetchQuestions(); fetchCurrentUser(); }, [statusFilter]);
+
+  const fetchCurrentUser = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    setCurrentUser(user);
+  };
 
   const fetchQuestions = async () => {
     setLoading(true);
@@ -96,6 +104,49 @@ const AdminCommunity = () => {
     }
   };
 
+  const handleSubmitExpertAnswer = async (questionId) => {
+    const content = expertAnswer[questionId]?.trim();
+    if (!content) {
+      toast.error('Please enter an answer');
+      return;
+    }
+    if (!currentUser) {
+      toast.error('You must be logged in');
+      return;
+    }
+    setSubmittingAnswer(questionId);
+    try {
+      const { error } = await supabase.from('community_answers').insert({
+        question_id: questionId,
+        user_id: currentUser.id,
+        content: content,
+        is_anonymous: false,
+        display_name: 'Expert',
+        is_expert_answer: true,
+        status: 'published'
+      });
+      if (error) throw error;
+      
+      // Update answers count
+      const question = questions.find(q => q.id === questionId);
+      if (question) {
+        await supabase.from('community_questions').update({ 
+          answers_count: (question.answers_count || 0) + 1 
+        }).eq('id', questionId);
+      }
+      
+      toast.success('Expert answer posted!');
+      setExpertAnswer(prev => ({ ...prev, [questionId]: '' }));
+      fetchAnswers(questionId);
+      fetchQuestions();
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Failed to post answer');
+    } finally {
+      setSubmittingAnswer(null);
+    }
+  };
+
   const filteredQuestions = questions.filter(q => q.title.toLowerCase().includes(searchTerm.toLowerCase()) || q.content.toLowerCase().includes(searchTerm.toLowerCase()));
   const formatDate = (dateString) => new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
@@ -156,6 +207,29 @@ const AdminCommunity = () => {
 
                 {expandedQuestion === question.id && (
                   <div className="border-t border-slate-100 bg-slate-50 p-4">
+                    {/* Expert Answer Form */}
+                    <div className="mb-4 bg-amber-50 border border-amber-200 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Award className="w-5 h-5 text-amber-600" />
+                        <h4 className="font-medium text-amber-800">Post Expert Answer</h4>
+                      </div>
+                      <textarea
+                        value={expertAnswer[question.id] || ''}
+                        onChange={(e) => setExpertAnswer(prev => ({ ...prev, [question.id]: e.target.value }))}
+                        placeholder="Write your expert answer here..."
+                        rows={3}
+                        className="w-full px-3 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm mb-2"
+                      />
+                      <button
+                        onClick={() => handleSubmitExpertAnswer(question.id)}
+                        disabled={submittingAnswer === question.id}
+                        className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 disabled:opacity-50 transition-colors text-sm font-medium"
+                      >
+                        <Send className="w-4 h-4" />
+                        {submittingAnswer === question.id ? 'Posting...' : 'Post Expert Answer'}
+                      </button>
+                    </div>
+
                     <h4 className="font-medium text-slate-700 mb-3">Answers ({answers[question.id]?.length || 0})</h4>
                     {!answers[question.id] ? (
                       <p className="text-slate-500 text-sm">Loading answers...</p>
@@ -164,10 +238,15 @@ const AdminCommunity = () => {
                     ) : (
                       <div className="space-y-3">
                         {answers[question.id].map((answer) => (
-                          <div key={answer.id} className={'bg-white rounded-lg p-3 ' + (answer.is_best_answer ? 'ring-2 ring-emerald-500' : 'border border-slate-200')}>
+                          <div key={answer.id} className={'bg-white rounded-lg p-3 relative ' + (answer.is_expert_answer ? 'ring-2 ring-amber-400' : answer.is_best_answer ? 'ring-2 ring-emerald-500' : 'border border-slate-200')}>
+                            {answer.is_expert_answer && (
+                              <span className="absolute -top-2 right-3 px-2 py-0.5 bg-amber-400 text-amber-900 text-xs font-semibold rounded-full">
+                                Expert Answer
+                              </span>
+                            )}
                             <div className="flex items-start justify-between gap-2">
                               <div className="flex-1">
-                                {answer.is_best_answer && <span className="text-xs font-medium text-emerald-600 mb-1 block">Accepted Answer</span>}
+                                {answer.is_best_answer && !answer.is_expert_answer && <span className="text-xs font-medium text-emerald-600 mb-1 block">Accepted Answer</span>}
                                 <p className="text-slate-700 text-sm">{answer.content}</p>
                                 <div className="flex items-center gap-3 mt-2 text-xs text-slate-500">
                                   <span>{answer.is_anonymous ? 'Anonymous' : (answer.display_name || 'User')}</span>
