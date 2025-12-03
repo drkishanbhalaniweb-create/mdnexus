@@ -30,7 +30,14 @@ const QuestionDetail = () => {
       setQuestion(questionData);
       await supabase.from('community_questions').update({ views: (questionData.views || 0) + 1 }).eq('id', questionData.id);
       const { data: answersData } = await supabase.from('community_answers').select('*').eq('question_id', questionData.id).eq('status', 'published').order('is_expert_answer', { ascending: false, nullsFirst: false }).order('is_best_answer', { ascending: false, nullsFirst: false }).order('upvotes', { ascending: false });
-      setAnswers(answersData || []);
+      const visibleAnswers = answersData || [];
+      setAnswers(visibleAnswers);
+      
+      // Sync the answer count if it doesn't match
+      if (questionData.answers_count !== visibleAnswers.length) {
+        await supabase.from('community_questions').update({ answers_count: visibleAnswers.length }).eq('id', questionData.id);
+        setQuestion(prev => prev ? { ...prev, answers_count: visibleAnswers.length } : prev);
+      }
     } catch (error) {
       console.error('Error:', error);
     } finally {

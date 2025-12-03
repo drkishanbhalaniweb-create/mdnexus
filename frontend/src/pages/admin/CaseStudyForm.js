@@ -14,12 +14,11 @@ const CaseStudyForm = () => {
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
-    client_name: '',
     excerpt: '',
-    content_html: '',
     challenge: '',
     solution: '',
     results: '',
+    key_takeaway: '',
     is_published: false,
     published_at: new Date().toISOString().split('T')[0],
     tags: [],
@@ -34,10 +33,10 @@ const CaseStudyForm = () => {
   ];
 
   const [contentText, setContentText] = useState({
-    content: '',
     challenge: '',
     solution: '',
     results: '',
+    key_takeaway: '',
   });
 
   useEffect(() => {
@@ -55,10 +54,10 @@ const CaseStudyForm = () => {
       });
       // Convert HTML back to plain text for editing
       setContentText({
-        content: htmlToText(data.content_html),
         challenge: htmlToText(data.challenge || ''),
         solution: htmlToText(data.solution || ''),
         results: htmlToText(data.results || ''),
+        key_takeaway: htmlToText(data.key_takeaway || ''),
       });
     } catch (error) {
       console.error('Error fetching case study:', error);
@@ -122,7 +121,7 @@ const CaseStudyForm = () => {
     });
     setFormData({
       ...formData,
-      [field === 'content' ? 'content_html' : field]: textToHtml(text),
+      [field]: textToHtml(text),
     });
   };
 
@@ -157,18 +156,25 @@ const CaseStudyForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate required fields
+    if (!formData.challenge || !contentText.challenge.trim()) {
+      toast.error('Challenge is required');
+      return;
+    }
+    
     setLoading(true);
 
     try {
       const dataToSave = {
         title: formData.title,
         slug: formData.slug,
-        client_name: formData.client_name || null,
         excerpt: formData.excerpt,
-        content_html: formData.content_html,
-        challenge: formData.challenge || null,
+        content_html: formData.challenge, // Use challenge as main content for backwards compatibility
+        challenge: formData.challenge,
         solution: formData.solution || null,
         results: formData.results || null,
+        key_takeaway: formData.key_takeaway || null,
         tags: formData.tags || [],
         is_published: formData.is_published,
         published_at: formData.published_at + 'T00:00:00Z',
@@ -236,20 +242,6 @@ const CaseStudyForm = () => {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Client Name (Optional)
-                </label>
-                <input
-                  type="text"
-                  name="client_name"
-                  value={formData.client_name}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  placeholder="e.g., Veteran John D."
                 />
               </div>
 
@@ -324,63 +316,66 @@ const CaseStudyForm = () => {
           </div>
 
           <div className="bg-white rounded-xl shadow-sm p-6 border border-slate-200">
-            <h2 className="text-xl font-bold text-slate-900 mb-4">Content</h2>
+            <h2 className="text-xl font-bold text-slate-900 mb-4">Content Sections</h2>
+            <p className="text-sm text-slate-500 mb-4">
+              Use bullet points with "- " at the start of each line. Use blank lines between paragraphs.
+            </p>
             
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Main Content *
-                </label>
-                <textarea
-                  value={contentText.content}
-                  onChange={(e) => handleContentChange('content', e.target.value)}
-                  required
-                  rows="10"
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
-                  placeholder="Write your content here. Use # for headings, - for lists, and double line breaks for paragraphs."
-                />
-                <p className="text-xs text-slate-500 mt-1">
-                  Formatting: # Heading, ## Subheading, - List item, blank line for new paragraph
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  The Challenge (Optional)
+                  Challenge * <span className="text-red-500">(Required)</span>
                 </label>
                 <textarea
                   value={contentText.challenge}
                   onChange={(e) => handleContentChange('challenge', e.target.value)}
+                  required
                   rows="6"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
-                  placeholder="Describe the challenge or problem..."
+                  placeholder="Describe the challenge or problem...&#10;&#10;Use bullet points:&#10;- First point&#10;- Second point"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Our Solution (Optional)
+                  What Existed Before (Optional)
                 </label>
                 <textarea
                   value={contentText.solution}
                   onChange={(e) => handleContentChange('solution', e.target.value)}
                   rows="6"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
-                  placeholder="Describe the solution provided..."
+                  placeholder="Describe what existed before or previous attempts...&#10;&#10;Use bullet points:&#10;- First point&#10;- Second point"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  The Results (Optional)
+                  Our Contribution (Optional)
                 </label>
                 <textarea
                   value={contentText.results}
                   onChange={(e) => handleContentChange('results', e.target.value)}
                   rows="6"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
-                  placeholder="Describe the outcomes and results..."
+                  placeholder="Describe our contribution and outcomes...&#10;&#10;Use bullet points:&#10;- First point&#10;- Second point"
                 />
+              </div>
+
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <label className="block text-sm font-semibold text-amber-800 mb-2">
+                  Key Takeaway (Optional) - Yellow Highlight Box
+                </label>
+                <textarea
+                  value={contentText.key_takeaway}
+                  onChange={(e) => handleContentChange('key_takeaway', e.target.value)}
+                  rows="4"
+                  className="w-full px-4 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-sm bg-white"
+                  placeholder="Key takeaway or important note to highlight...&#10;&#10;Use bullet points:&#10;- First point&#10;- Second point"
+                />
+                <p className="text-xs text-amber-600 mt-1">
+                  This will appear in a yellow highlighted box on the public page
+                </p>
               </div>
             </div>
           </div>

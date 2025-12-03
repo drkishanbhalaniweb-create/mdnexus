@@ -127,7 +127,7 @@ const CaseStudies = () => {
                       Title
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                      Client
+                      Tags
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                       Status
@@ -150,10 +150,21 @@ const CaseStudies = () => {
                         <div className="text-sm font-medium text-slate-900">{caseStudy.title}</div>
                         <div className="text-sm text-slate-500">{caseStudy.excerpt?.substring(0, 60)}...</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm text-slate-700">
-                          {caseStudy.client_name || '-'}
-                        </span>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-wrap gap-1">
+                          {caseStudy.tags && caseStudy.tags.length > 0 ? (
+                            caseStudy.tags.map((tag, index) => (
+                              <span
+                                key={index}
+                                className="inline-block bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-xs font-medium"
+                              >
+                                {tag}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-sm text-slate-400">-</span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 text-xs rounded-full ${

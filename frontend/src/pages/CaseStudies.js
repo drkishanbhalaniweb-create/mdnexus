@@ -1,21 +1,42 @@
 import { useEffect, useState } from 'react';
-import { Briefcase, Target, Lightbulb, TrendingUp } from 'lucide-react';
+import { Briefcase, Target, Lightbulb, TrendingUp, Star, Filter } from 'lucide-react';
 import { caseStudyApi } from '../lib/api';
 import SEO from '../components/SEO';
 
+const AVAILABLE_TAGS = [
+  'SMC/Aid & Attendance',
+  'Primary Service Connection',
+  'Secondary Service Connection',
+  'Mental Health Claim',
+  '1151 Claim'
+];
+
 const CaseStudies = () => {
   const [caseStudies, setCaseStudies] = useState([]);
+  const [filteredCaseStudies, setFilteredCaseStudies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedTag, setSelectedTag] = useState(null);
 
   useEffect(() => {
     fetchCaseStudies();
   }, []);
+
+  useEffect(() => {
+    if (selectedTag) {
+      setFilteredCaseStudies(
+        caseStudies.filter(cs => cs.tags && cs.tags.includes(selectedTag))
+      );
+    } else {
+      setFilteredCaseStudies(caseStudies);
+    }
+  }, [selectedTag, caseStudies]);
 
   const fetchCaseStudies = async () => {
     setLoading(true);
     try {
       const data = await caseStudyApi.getAll();
       setCaseStudies(data);
+      setFilteredCaseStudies(data);
     } catch (error) {
       console.error('Error fetching case studies:', error);
     } finally {
@@ -68,18 +89,66 @@ const CaseStudies = () => {
           </section>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-20">
+            {/* Tag Filter */}
+            <div className="mb-8">
+              <div className="flex items-center gap-2 mb-4">
+                <Filter className="w-5 h-5 text-slate-600" />
+                <span className="text-sm font-semibold text-slate-700">Filter by Category:</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setSelectedTag(null)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    selectedTag === null
+                      ? 'bg-slate-800 text-white shadow-lg'
+                      : 'bg-white/80 text-slate-700 hover:bg-white border border-slate-200'
+                  }`}
+                >
+                  All Case Studies
+                </button>
+                {AVAILABLE_TAGS.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => setSelectedTag(tag)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      selectedTag === tag
+                        ? 'bg-amber-500 text-white shadow-lg'
+                        : 'bg-white/80 text-slate-700 hover:bg-white border border-slate-200'
+                    }`}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+              {selectedTag && (
+                <p className="mt-3 text-sm text-slate-600">
+                  Showing {filteredCaseStudies.length} case {filteredCaseStudies.length === 1 ? 'study' : 'studies'} for "{selectedTag}"
+                </p>
+              )}
+            </div>
+
             {/* Case Studies Grid */}
             {loading ? (
               <div className="text-center py-20">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-navy-700 mx-auto" />
               </div>
-            ) : caseStudies.length === 0 ? (
+            ) : filteredCaseStudies.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-xl text-slate-600">No case studies available yet</p>
+                <p className="text-xl text-slate-600">
+                  {selectedTag ? `No case studies found for "${selectedTag}"` : 'No case studies available yet'}
+                </p>
+                {selectedTag && (
+                  <button
+                    onClick={() => setSelectedTag(null)}
+                    className="mt-4 text-indigo-600 hover:text-indigo-700 font-medium"
+                  >
+                    View all case studies
+                  </button>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {caseStudies.map((caseStudy) => (
+                {filteredCaseStudies.map((caseStudy) => (
                   <div
                     key={caseStudy.id}
                     data-testid={`case-study-${caseStudy.slug}`}
@@ -99,8 +168,8 @@ const CaseStudies = () => {
                           ))}
                         </div>
                       ) : (
-                        <div className="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded text-xs font-semibold uppercase mb-3">
-                          {caseStudy.client_name || 'Service Connection'}
+                        <div className="inline-block bg-slate-100 text-slate-600 px-3 py-1 rounded text-xs font-semibold uppercase mb-3">
+                          Case Study
                         </div>
                       )}
                       <h3 className="text-xl font-bold text-slate-900 mb-2">
@@ -119,21 +188,21 @@ const CaseStudies = () => {
                           <h4 className="text-sm font-bold text-slate-900">Challenge:</h4>
                         </div>
                         <div 
-                          className="text-sm text-slate-600 leading-relaxed pl-6 prose prose-sm max-w-none"
+                          className="text-sm text-slate-600 leading-relaxed pl-6 prose prose-sm max-w-none [&_ul]:list-disc [&_ul]:ml-4 [&_li]:mb-1"
                           dangerouslySetInnerHTML={{ __html: caseStudy.challenge }}
                         />
                       </div>
                     )}
 
-                    {/* What Worked Before Section */}
+                    {/* What Existed Before Section */}
                     {caseStudy.solution && (
                       <div className="mb-4">
                         <div className="flex items-start space-x-2 mb-2">
                           <Lightbulb className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                          <h4 className="text-sm font-bold text-slate-900">What worked before:</h4>
+                          <h4 className="text-sm font-bold text-slate-900">What existed before:</h4>
                         </div>
                         <div 
-                          className="text-sm text-slate-600 leading-relaxed pl-6 prose prose-sm max-w-none"
+                          className="text-sm text-slate-600 leading-relaxed pl-6 prose prose-sm max-w-none [&_ul]:list-disc [&_ul]:ml-4 [&_li]:mb-1"
                           dangerouslySetInnerHTML={{ __html: caseStudy.solution }}
                         />
                       </div>
@@ -147,8 +216,22 @@ const CaseStudies = () => {
                           <h4 className="text-sm font-bold text-slate-900">Our contribution:</h4>
                         </div>
                         <div 
-                          className="text-sm text-slate-600 leading-relaxed pl-6 prose prose-sm max-w-none"
+                          className="text-sm text-slate-600 leading-relaxed pl-6 prose prose-sm max-w-none [&_ul]:list-disc [&_ul]:ml-4 [&_li]:mb-1"
                           dangerouslySetInnerHTML={{ __html: caseStudy.results }}
+                        />
+                      </div>
+                    )}
+
+                    {/* Key Takeaway - Yellow Box */}
+                    {caseStudy.key_takeaway && (
+                      <div className="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-4">
+                        <div className="flex items-start space-x-2 mb-2">
+                          <Star className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                          <h4 className="text-sm font-bold text-amber-800">Key Takeaway:</h4>
+                        </div>
+                        <div 
+                          className="text-sm text-amber-900 leading-relaxed pl-6 prose prose-sm max-w-none [&_ul]:list-disc [&_ul]:ml-4 [&_li]:mb-1"
+                          dangerouslySetInnerHTML={{ __html: caseStudy.key_takeaway }}
                         />
                       </div>
                     )}

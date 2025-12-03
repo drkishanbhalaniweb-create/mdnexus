@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Eye, Briefcase, Target, Lightbulb, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Calendar, Eye, Target, Lightbulb, TrendingUp, Star } from 'lucide-react';
 import { caseStudyApi } from '../lib/api';
 import SEO from '../components/SEO';
 import OptimizedImage from '../components/OptimizedImage';
@@ -98,10 +98,16 @@ const CaseStudyDetail = () => {
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Case Studies</span>
             </Link>
-            {caseStudy.client_name && (
-              <div className="inline-flex items-center space-x-2 bg-indigo-500 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                <Briefcase className="w-4 h-4" />
-                <span>{caseStudy.client_name}</span>
+            {caseStudy.tags && caseStudy.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {caseStudy.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="inline-block bg-amber-500 text-white px-4 py-2 rounded-full text-sm font-semibold"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             )}
             <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">{caseStudy.title}</h1>
@@ -149,40 +155,56 @@ const CaseStudyDetail = () => {
                 <h2 className="text-2xl font-bold text-slate-900">The Challenge</h2>
               </div>
               <div
-                className="prose prose-slate prose-lg max-w-none"
+                className="prose prose-slate prose-lg max-w-none [&_ul]:list-disc [&_ul]:ml-6 [&_li]:mb-2"
                 dangerouslySetInnerHTML={{ __html: caseStudy.challenge }}
               />
             </div>
           )}
 
-          {/* Solution Section */}
+          {/* What Existed Before Section */}
           {caseStudy.solution && (
             <div className="bg-white rounded-2xl p-8 md:p-12 shadow-lg mb-8">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="bg-blue-100 p-3 rounded-lg">
                   <Lightbulb className="w-6 h-6 text-blue-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-900">Our Solution</h2>
+                <h2 className="text-2xl font-bold text-slate-900">What Existed Before</h2>
               </div>
               <div
-                className="prose prose-slate prose-lg max-w-none"
+                className="prose prose-slate prose-lg max-w-none [&_ul]:list-disc [&_ul]:ml-6 [&_li]:mb-2"
                 dangerouslySetInnerHTML={{ __html: caseStudy.solution }}
               />
             </div>
           )}
 
-          {/* Results Section */}
+          {/* Our Contribution Section */}
           {caseStudy.results && (
             <div className="bg-white rounded-2xl p-8 md:p-12 shadow-lg mb-8">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="bg-green-100 p-3 rounded-lg">
                   <TrendingUp className="w-6 h-6 text-green-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-900">The Results</h2>
+                <h2 className="text-2xl font-bold text-slate-900">Our Contribution</h2>
               </div>
               <div
-                className="prose prose-slate prose-lg max-w-none"
+                className="prose prose-slate prose-lg max-w-none [&_ul]:list-disc [&_ul]:ml-6 [&_li]:mb-2"
                 dangerouslySetInnerHTML={{ __html: caseStudy.results }}
+              />
+            </div>
+          )}
+
+          {/* Key Takeaway - Yellow Box */}
+          {caseStudy.key_takeaway && (
+            <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-8 md:p-12 shadow-lg mb-8">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="bg-amber-200 p-3 rounded-lg">
+                  <Star className="w-6 h-6 text-amber-700" />
+                </div>
+                <h2 className="text-2xl font-bold text-amber-900">Key Takeaway</h2>
+              </div>
+              <div
+                className="prose prose-lg max-w-none text-amber-900 [&_ul]:list-disc [&_ul]:ml-6 [&_li]:mb-2"
+                dangerouslySetInnerHTML={{ __html: caseStudy.key_takeaway }}
               />
             </div>
           )}
@@ -191,7 +213,7 @@ const CaseStudyDetail = () => {
           {!caseStudy.challenge && !caseStudy.solution && !caseStudy.results && (
             <div className="bg-white rounded-2xl p-8 md:p-12 shadow-lg mb-8">
               <div
-                className="prose prose-slate prose-lg max-w-none"
+                className="prose prose-slate prose-lg max-w-none [&_ul]:list-disc [&_ul]:ml-6 [&_li]:mb-2"
                 dangerouslySetInnerHTML={{ __html: caseStudy.content_html }}
               />
             </div>

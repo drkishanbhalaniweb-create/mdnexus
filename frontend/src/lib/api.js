@@ -440,13 +440,13 @@ export const caseStudyApi = {
         {
           slug,
           title: caseStudyData.title,
-          client_name: caseStudyData.client_name || null,
           excerpt: caseStudyData.excerpt,
-          content_html: caseStudyData.content_html,
+          content_html: caseStudyData.content_html || caseStudyData.challenge,
           challenge: caseStudyData.challenge || null,
           solution: caseStudyData.solution || null,
           results: caseStudyData.results || null,
-          featured_image: caseStudyData.featured_image || null,
+          key_takeaway: caseStudyData.key_takeaway || null,
+          tags: caseStudyData.tags || [],
           is_published: caseStudyData.is_published !== undefined ? caseStudyData.is_published : true,
           published_at: caseStudyData.published_at || new Date().toISOString(),
         },
@@ -461,14 +461,15 @@ export const caseStudyApi = {
   async update(id, caseStudyData) {
     const updateData = {
       title: caseStudyData.title,
-      client_name: caseStudyData.client_name || null,
       excerpt: caseStudyData.excerpt,
-      content_html: caseStudyData.content_html,
+      content_html: caseStudyData.content_html || caseStudyData.challenge,
       challenge: caseStudyData.challenge || null,
       solution: caseStudyData.solution || null,
       results: caseStudyData.results || null,
-      featured_image: caseStudyData.featured_image || null,
+      key_takeaway: caseStudyData.key_takeaway || null,
+      tags: caseStudyData.tags || [],
       is_published: caseStudyData.is_published,
+      published_at: caseStudyData.published_at,
     };
 
     // If slug is provided and different, ensure it's unique
