@@ -12,6 +12,8 @@ const QuestionDetail = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [newAnswer, setNewAnswer] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(false);
 
@@ -62,17 +64,27 @@ const QuestionDetail = () => {
 
   const handleSubmitAnswer = async (e) => {
     e.preventDefault();
-    if (!user) { toast.error('Please sign in'); return; }
     if (!newAnswer.trim()) { toast.error('Please enter your answer'); return; }
     setSubmitting(true);
     try {
-      await supabase.from('community_answers').insert({ question_id: question.id, user_id: user.id, content: newAnswer.trim(), is_anonymous: isAnonymous, display_name: isAnonymous ? null : user.email?.split('@')[0] });
+      await supabase.from('community_answers').insert({ 
+        question_id: question.id, 
+        user_id: user?.id || '00000000-0000-0000-0000-000000000000', // Use dummy UUID if no user
+        content: newAnswer.trim(), 
+        is_anonymous: isAnonymous, 
+        display_name: isAnonymous ? null : (displayName.trim() || 'Community Member'),
+        user_email: userEmail.trim() || null,
+        status: 'published' // Auto-publish answers
+      });
       await supabase.from('community_questions').update({ answers_count: (question.answers_count || 0) + 1 }).eq('id', question.id);
-      toast.success('Answer posted!');
+      toast.success('Answer posted successfully!');
       setNewAnswer('');
+      setDisplayName('');
+      setUserEmail('');
       setIsAnonymous(false);
       fetchQuestion();
     } catch (error) {
+      console.error('Error posting answer:', error);
       toast.error('Failed to post answer');
     } finally {
       setSubmitting(false);
@@ -178,23 +190,43 @@ const QuestionDetail = () => {
 
             <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/40 p-6">
               <h3 className="text-lg font-semibold text-slate-900 mb-4">Your Answer</h3>
-              {user ? (
-                <form onSubmit={handleSubmitAnswer}>
-                  <textarea value={newAnswer} onChange={(e) => setNewAnswer(e.target.value)} placeholder="Share your knowledge..." rows={5} className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none mb-4" required />
-                  <div className="flex items-center justify-between">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input type="checkbox" checked={isAnonymous} onChange={(e) => setIsAnonymous(e.target.checked)} className="w-4 h-4 rounded" style={{ accentColor: '#B91C3C' }} />
-                      <span className="text-sm text-slate-600">Post anonymously</span>
+              <form onSubmit={handleSubmitAnswer}>
+                <textarea value={newAnswer} onChange={(e) => setNewAnswer(e.target.value)} placeholder="Share your knowledge or experience..." rows={5} className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none mb-4" required />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Display Name {!isAnonymous && <span className="text-slate-500 font-normal">(optional)</span>}
                     </label>
-                    <button type="submit" disabled={submitting} className="px-6 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50 transition-opacity shadow-lg" style={{ backgroundColor: '#B91C3C' }}>{submitting ? 'Posting...' : 'Post Answer'}</button>
+                    <input 
+                      type="text" 
+                      value={displayName} 
+                      onChange={(e) => setDisplayName(e.target.value)} 
+                      placeholder="Your name" 
+                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none" 
+                      disabled={isAnonymous}
+                    />
                   </div>
-                </form>
-              ) : (
-                <div className="text-center py-6 bg-slate-50 rounded-lg">
-                  <p className="text-slate-600 mb-3">Sign in to post an answer</p>
-                  <Link to="/admin/login" className="inline-block px-4 py-2 text-white rounded-lg hover:opacity-90 transition-opacity shadow-lg" style={{ backgroundColor: '#B91C3C' }}>Sign In</Link>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Email <span className="text-slate-500 font-normal">(for notifications, not shown)</span>
+                    </label>
+                    <input 
+                      type="email" 
+                      value={userEmail} 
+                      onChange={(e) => setUserEmail(e.target.value)} 
+                      placeholder="your@email.com" 
+                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none" 
+                    />
+                  </div>
                 </div>
-              )}
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={isAnonymous} onChange={(e) => setIsAnonymous(e.target.checked)} className="w-4 h-4 rounded" style={{ accentColor: '#B91C3C' }} />
+                    <span className="text-sm text-slate-600">Post anonymously</span>
+                  </label>
+                  <button type="submit" disabled={submitting} className="px-6 py-2 text-white rounded-lg hover:opacity-90 disabled:opacity-50 transition-opacity shadow-lg" style={{ backgroundColor: '#B91C3C' }}>{submitting ? 'Posting...' : 'Post Answer'}</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
