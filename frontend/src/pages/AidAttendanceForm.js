@@ -124,7 +124,8 @@ const AidAttendanceForm = () => {
                 <h3 className="text-lg font-semibold text-slate-900 mb-4">Upload Supporting Documents</h3>
                 <FileUpload 
                   contactId={contactId}
-                  onUploadSuccess={() => toast.success('Document uploaded successfully!')}
+                  onUploadComplete={() => toast.success('Document uploaded successfully!')}
+                  onUploadError={(error) => toast.error('Upload failed: ' + error.message)}
                 />
                 <FileList contactId={contactId} />
               </div>

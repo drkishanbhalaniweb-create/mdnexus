@@ -30,7 +30,7 @@ const QuestionDetail = () => {
       const { data: questionData, error: questionError } = await supabase.from('community_questions').select('*').eq('slug', slug).eq('status', 'published').single();
       if (questionError) throw questionError;
       setQuestion(questionData);
-      await supabase.from('community_questions').update({ views: (questionData.views || 0) + 1 }).eq('id', questionData.id);
+      await supabase.from('community_questions').update({ views_count: (questionData.views_count || 0) + 1 }).eq('id', questionData.id);
       const { data: answersData } = await supabase.from('community_answers').select('*').eq('question_id', questionData.id).eq('status', 'published').order('is_expert_answer', { ascending: false, nullsFirst: false }).order('is_best_answer', { ascending: false, nullsFirst: false }).order('upvotes', { ascending: false });
       const visibleAnswers = answersData || [];
       setAnswers(visibleAnswers);
