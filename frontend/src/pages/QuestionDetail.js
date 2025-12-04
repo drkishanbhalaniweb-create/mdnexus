@@ -69,7 +69,7 @@ const QuestionDetail = () => {
     try {
       await supabase.from('community_answers').insert({ 
         question_id: question.id, 
-        user_id: user?.id || '00000000-0000-0000-0000-000000000000', // Use dummy UUID if no user
+        user_id: user?.id || null, // NULL for anonymous users
         content: newAnswer.trim(), 
         is_anonymous: isAnonymous, 
         display_name: isAnonymous ? null : (displayName.trim() || 'Community Member'),
