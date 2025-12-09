@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CheckCircle, FileText, User, Mail, Phone, MessageSquare, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -10,6 +10,7 @@ const ClaimReadinessReview = () => {
   const [step, setStep] = useState('form'); // 'form' or 'payment'
   const [formSubmissionId, setFormSubmissionId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [price, setPrice] = useState(225); // Default price
   
   const [formData, setFormData] = useState({
     veteranName: '',
@@ -19,6 +20,26 @@ const ClaimReadinessReview = () => {
     additionalInfo: '',
     acceptedTerms: false,
   });
+
+  // Fetch price from services table
+  useEffect(() => {
+    const fetchPrice = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('services')
+          .select('base_price_usd')
+          .eq('slug', 'claim-readiness-review')
+          .single();
+        
+        if (data && !error) {
+          setPrice(data.base_price_usd);
+        }
+      } catch (error) {
+        console.error('Error fetching price:', error);
+      }
+    };
+    fetchPrice();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -87,7 +108,7 @@ const ClaimReadinessReview = () => {
   return (
     <>
       <SEO
-        title="Claim Readiness Review - $225"
+        title={`Claim Readiness Review - $${price}`}
         description="Get a comprehensive review of your VA disability claim readiness. Expert analysis to ensure your claim is complete and optimized for success."
         keywords="VA claim review, disability claim readiness, claim preparation, veteran services"
       />
@@ -106,7 +127,7 @@ const ClaimReadinessReview = () => {
               Comprehensive analysis of your VA disability claim
             </p>
             <div className="inline-flex items-center bg-navy-100 text-navy-800 px-6 py-3 rounded-full font-bold text-2xl">
-              $225 - Pay Now
+              ${price} - Pay Now
             </div>
           </div>
 
@@ -282,7 +303,7 @@ const ClaimReadinessReview = () => {
                   </>
                 ) : (
                   <>
-                    Continue to Payment ($225)
+                    Continue to Payment (${price})
                   </>
                 )}
               </button>

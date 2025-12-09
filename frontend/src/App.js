@@ -42,7 +42,6 @@ const AdminBlogForm = lazy(() => import('./pages/admin/BlogForm'));
 const AdminCaseStudyForm = lazy(() => import('./pages/admin/CaseStudyForm'));
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'));
 const AdminCommunity = lazy(() => import('./pages/admin/Community'));
-const AdminPricing = lazy(() => import('./pages/admin/Pricing'));
 const ProtectedRoute = lazy(() => import('./components/admin/ProtectedRoute'));
 
 import './App.css';
@@ -176,14 +175,6 @@ function App() {
           element={
             <ProtectedRoute>
               <AdminUsers />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/pricing"
-          element={
-            <ProtectedRoute>
-              <AdminPricing />
             </ProtectedRoute>
           }
         />

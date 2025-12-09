@@ -200,7 +200,7 @@ const ServiceDetail = () => {
                   className="w-full text-white px-6 py-4 rounded-full font-semibold text-center transition-all hover:shadow-lg block"
                   style={{ backgroundColor: '#B91C3C' }}
                 >
-                  Book Now - $225
+                  Book Now - ${service.base_price_usd}
                 </Link>
               ) : service.slug === 'aid-attendance' ? (
                 <div className="space-y-3">
