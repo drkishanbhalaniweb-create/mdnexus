@@ -11,7 +11,8 @@ import {
   ClipboardList,
   Users,
   HelpCircle,
-  BookOpen
+  BookOpen,
+  DollarSign
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState, useEffect } from 'react';
@@ -66,6 +67,7 @@ const AdminLayout = ({ children }) => {
     { name: 'Case Studies', href: '/admin/case-studies', icon: BookOpen },
     { name: 'Blog Posts', href: '/admin/blog', icon: FileText },
     { name: 'Community Q&A', href: '/admin/community', icon: HelpCircle },
+    { name: 'Pricing', href: '/admin/pricing', icon: DollarSign },
     ...(isSuperAdmin ? [{ name: 'Admin Users', href: '/admin/users', icon: Users }] : []),
   ];
 

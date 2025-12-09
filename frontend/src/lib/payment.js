@@ -79,7 +79,7 @@ export const paymentApi = {
 };
 
 /**
- * Service pricing configuration
+ * Service pricing configuration (fallback - actual prices fetched from database)
  */
 export const SERVICE_PRICING = {
   claim_readiness_review: {
@@ -120,13 +120,45 @@ export const SERVICE_PRICING = {
 };
 
 /**
+ * Fetch pricing from database
+ * @returns {Promise<Object>} Pricing configuration
+ */
+export const fetchPricing = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('service_pricing')
+      .select('*')
+      .eq('is_active', true);
+
+    if (error) throw error;
+
+    // Convert to SERVICE_PRICING format
+    const pricing = {};
+    data.forEach(item => {
+      pricing[item.service_type] = {
+        name: item.service_name,
+        basePrice: item.base_price,
+        rushFee: item.rush_fee,
+      };
+    });
+
+    return pricing;
+  } catch (error) {
+    console.error('Error fetching pricing:', error);
+    return SERVICE_PRICING; // Fallback to hardcoded pricing
+  }
+};
+
+/**
  * Calculate total price including rush service
  * @param {string} serviceType - Service type key
  * @param {boolean} isRushService - Whether rush service is selected
+ * @param {Object} customPricing - Optional custom pricing object (from database)
  * @returns {number} Total price in cents
  */
-export const calculatePrice = (serviceType, isRushService = false) => {
-  const service = SERVICE_PRICING[serviceType];
+export const calculatePrice = (serviceType, isRushService = false, customPricing = null) => {
+  const pricing = customPricing || SERVICE_PRICING;
+  const service = pricing[serviceType];
   if (!service) return 0;
 
   return service.basePrice + (isRushService ? service.rushFee : 0);
