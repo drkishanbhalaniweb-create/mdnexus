@@ -373,7 +373,7 @@ const Community = () => {
                         </Link>
                         <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
                           <span className="flex items-center gap-1"><User className="w-4 h-4" />{question.is_anonymous ? 'Anonymous' : (question.display_name || 'User')}</span>
-                          <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{formatDate(question.created_at)}</span>
+                          {/* <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{formatDate(question.created_at)}</span> */}
                           <span className="flex items-center gap-1"><Eye className="w-4 h-4" />{question.views_count || 0} views</span>
                           {/* Mobile vote buttons */}
                           <div className="sm:hidden flex items-center gap-2">

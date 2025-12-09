@@ -147,7 +147,7 @@ const QuestionDetail = () => {
             <h1 className="text-2xl font-bold text-slate-900 mb-4">{question.title}</h1>
             <div className="flex items-center gap-4 text-sm text-slate-500 mb-4">
               <span className="flex items-center gap-1"><User className="w-4 h-4" />{question.is_anonymous ? 'Anonymous' : (question.display_name || 'User')}</span>
-              <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{formatDate(question.created_at)}</span>
+              {/* <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{formatDate(question.created_at)}</span> */}
             </div>
             <p className="text-slate-700 whitespace-pre-wrap mb-6">{question.content}</p>
               <div className="flex items-center gap-4 pt-4 border-t border-slate-100">
@@ -179,7 +179,7 @@ const QuestionDetail = () => {
                         </div>
                         <div className="flex items-center gap-4 text-sm text-slate-500">
                           <span className="flex items-center gap-1"><User className="w-4 h-4" />{answer.is_anonymous ? 'Anonymous' : (answer.display_name || 'User')}</span>
-                          <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{formatDate(answer.created_at)}</span>
+                          {/* <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{formatDate(answer.created_at)}</span> */}
                         </div>
                       </div>
                     </div>
