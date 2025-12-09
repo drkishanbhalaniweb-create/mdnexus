@@ -1,27 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { CheckCircle, Mail, Clock, FileText, ArrowRight } from 'lucide-react';
+import { CheckCircle, Mail, Clock, FileText, ArrowRight, Calendar } from 'lucide-react';
 import SEO from '../components/SEO';
+import { InlineWidget } from 'react-calendly';
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
-  const [countdown, setCountdown] = useState(10);
+  const [showCalendly, setShowCalendly] = useState(false);
 
+  // Don't auto-redirect, let user book meeting first
   useEffect(() => {
-    // Countdown timer for redirect
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          window.location.href = '/';
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    // Show Calendly after a short delay
+    const timer = setTimeout(() => {
+      setShowCalendly(true);
+    }, 2000);
 
-    return () => clearInterval(timer);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -136,6 +131,28 @@ const PaymentSuccess = () => {
             </ul>
           </div>
 
+          {/* Calendly Booking Section */}
+          {showCalendly && (
+            <div className="bg-white rounded-2xl p-8 shadow-lg mb-6">
+              <h2 className="text-2xl font-bold text-slate-900 mb-4 flex items-center justify-center">
+                <Calendar className="w-6 h-6 mr-2 text-indigo-600" />
+                Schedule Your Consultation
+              </h2>
+              <p className="text-center text-slate-600 mb-6">
+                Book a time to discuss your claim with our team
+              </p>
+              <div className="calendly-container">
+                <InlineWidget
+                  url="https://calendly.com/militarydisabilitynexus/30min"
+                  styles={{
+                    height: '700px',
+                    minWidth: '320px',
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
@@ -154,11 +171,6 @@ const PaymentSuccess = () => {
               View Services
             </Link>
           </div>
-
-          {/* Auto-redirect notice */}
-          <p className="text-center text-sm text-slate-500 mt-6">
-            Redirecting to home page in {countdown} seconds...
-          </p>
         </div>
       </div>
     </>
