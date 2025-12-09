@@ -29,7 +29,8 @@ const CaseStudyForm = () => {
     'Primary Service Connection',
     'Secondary Service Connection',
     'Mental Health Claim',
-    '1151 Claim'
+    '1151 Claim',
+    'Claim Readiness Review'
   ];
 
   const [contentText, setContentText] = useState({

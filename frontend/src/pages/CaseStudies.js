@@ -8,7 +8,8 @@ const AVAILABLE_TAGS = [
   'Primary Service Connection',
   'Secondary Service Connection',
   'Mental Health Claim',
-  '1151 Claim'
+  '1151 Claim',
+  'Claim Readiness Review'
 ];
 
 const CaseStudies = () => {
@@ -83,7 +84,13 @@ const CaseStudies = () => {
                   Success Stories
                 </h1>
                 <p className="text-lg sm:text-xl text-white/90 leading-relaxed max-w-4xl mx-auto">
-                  We provide professional, medically supported documentation that helps strengthen VA disability claims — without guarantees, pressure, or copy‑paste templates. Every story here is anonymous, respectful, and focused on what matters most: solid medical rationale.
+                  We provide medically supported documentation and expert guidance to help strengthen VA disability claims — including primary service connection, secondary conditions, Aid & Attendance, PACT Act claims, and §1151 cases.
+                </p>
+                <p className="text-lg sm:text-xl text-white/90 leading-relaxed max-w-4xl mx-auto mt-4">
+                  Each case study on this page is based on real veterans we've assisted, with all personal details removed to protect privacy.
+                </p>
+                <p className="text-lg sm:text-xl text-white/90 leading-relaxed max-w-4xl mx-auto mt-4">
+                  Our focus is on accurate medical reasoning, clear evidence analysis, and properly structured documentation — never guarantees, pressure tactics, or copy-paste templates.
                 </p>
               </div>
             </div>
@@ -162,6 +169,8 @@ const CaseStudies = () => {
                       return { text: 'text-green-700', bg: 'bg-green-100', border: 'border-green-300', dot: 'bg-green-500' };
                     if (tag?.includes('1151')) 
                       return { text: 'text-purple-700', bg: 'bg-purple-100', border: 'border-purple-300', dot: 'bg-purple-500' };
+                    if (tag?.includes('Claim Readiness') || tag?.includes('Readiness Review')) 
+                      return { text: 'text-indigo-700', bg: 'bg-indigo-100', border: 'border-indigo-300', dot: 'bg-indigo-500' };
                     return { text: 'text-slate-700', bg: 'bg-slate-100', border: 'border-slate-300', dot: 'bg-slate-500' };
                   };
                   
