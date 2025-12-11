@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Twitter, Facebook, Instagram, Mail } from 'lucide-react';
+import { Linkedin, Facebook, Instagram, Mail } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -30,8 +30,8 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-bold text-lg mb-6">Follow Us</h3>
             <div className="flex space-x-4">
-              <a href="#" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
-                <Twitter className="w-5 h-5 text-white" />
+              <a href="https://www.linkedin.com/company/military-disability-nexus/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
+                <Linkedin className="w-5 h-5 text-white" />
               </a>
               <a href="https://www.facebook.com/share/1DXxUd6Q74/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
                 <Facebook className="w-5 h-5 text-white" />
@@ -137,7 +137,7 @@ const Footer = () => {
           "priceRange": "$$",
           "medicalSpecialty": "Veterans Medical Documentation",
           "sameAs": [
-            "https://twitter.com/MilitaryDisabilityNexus",
+            "https://www.linkedin.com/company/military-disability-nexus/",
             "https://www.facebook.com/share/1DXxUd6Q74/?mibextid=wwXIfr",
             "https://www.instagram.com/military_disability_nexus?igsh=MTFtMmtvODg3NmZlMA==&utm_source=ig_contact_invite"
           ]
