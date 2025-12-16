@@ -10,4 +10,4 @@ export default function NotFound() {
       <Link to="/" className="text-xl">Go to Home</Link>
     </div>
   );
-} 
+}  
