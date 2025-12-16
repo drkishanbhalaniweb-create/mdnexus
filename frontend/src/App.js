@@ -28,6 +28,7 @@ const ClaimReadinessReview = lazy(() => import('./pages/ClaimReadinessReview'));
 const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const Disclaimer = lazy(() => import('./pages/Disclaimer'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Lazy load admin panel (separate chunk)
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
@@ -86,6 +87,7 @@ function App() {
           <Route path="disclaimer" element={<Disclaimer />} />
           <Route path="community" element={<Community />} />
           <Route path="community/question/:slug" element={<QuestionDetail />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
 
         {/* Admin Routes */}

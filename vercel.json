@@ -4,6 +4,18 @@
   "devCommand": "cd frontend && npm start",
   "installCommand": "cd frontend && npm install",
   "framework": "create-react-app",
+
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        { "type": "host", "value": "militarydisabilitynexus.com" }
+      ],
+      "destination": "https://www.militarydisabilitynexus.com/:path*",
+      "permanent": true
+    }
+  ],
+
   "rewrites": [
     {
       "source": "/sitemap.xml",
@@ -18,6 +30,7 @@
       "destination": "/index.html"
     }
   ],
+
   "headers": [
     {
       "source": "/static/(.*)",
