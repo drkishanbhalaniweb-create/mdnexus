@@ -28,10 +28,7 @@ const ClaimReadinessReview = lazy(() => import('./pages/ClaimReadinessReview'));
 const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const Disclaimer = lazy(() => import('./pages/Disclaimer'));
-
-// Lazy load diagnostic pages
-const Diagnostic = lazy(() => import('./pages/Diagnostic'));
-const DiagnosticResults = lazy(() => import('./pages/DiagnosticResults'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Lazy load admin panel (separate chunk)
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
@@ -91,8 +88,7 @@ function App() {
           <Route path="disclaimer" element={<Disclaimer />} />
           <Route path="community" element={<Community />} />
           <Route path="community/question/:slug" element={<QuestionDetail />} />
-          <Route path="diagnostic" element={<Diagnostic />} />
-          <Route path="diagnostic/results" element={<DiagnosticResults />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
 
         {/* Admin Routes */}

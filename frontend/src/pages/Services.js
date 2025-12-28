@@ -39,8 +39,8 @@ const Services = () => {
   return (
     <>
       <SEO
-        title="VA Medical Documentation Services"
-        description="Professional nexus letters, DBQs, Aid & Attendance evaluations, and medical consultations for VA disability claims. Licensed clinicians, 7-10 day turnaround."
+        title="VA Medical Documentation Services USA | Military Disability Nexus"
+        description="Veteran-focused medical documentation services from clinicians who review records and provide VA-compliant evidence to support disability claims nationwide."
         keywords="VA nexus letter, DBQ evaluation, aid and attendance, C&P exam coaching, 1151 claim, veteran medical services"
       />
 
