@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { CheckCircle, Mail, Clock, FileText, ArrowRight, Calendar } from 'lucide-react';
-import Cal, { getCalApi } from "@calcom/embed-react";
 import SEO from '../components/SEO';
 
 const PaymentSuccess = () => {
@@ -9,19 +8,22 @@ const PaymentSuccess = () => {
   const sessionId = searchParams.get('session_id');
   const [showCal, setShowCal] = useState(false);
 
-  // Initialize Cal.com API and show after delay
+  // Show Cal.com widget after delay
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowCal(true);
       
-      (async function () {
-        const cal = await getCalApi({ namespace: "claim-readiness-review" });
-        cal("ui", {
-          theme: "light",
-          hideEventTypeDetails: false,
-          layout: "month_view"
-        });
-      })();
+      // Load Cal.com embed script
+      const script = document.createElement('script');
+      script.src = 'https://app.cal.com/embed/embed.js';
+      script.async = true;
+      document.head.appendChild(script);
+      
+      return () => {
+        if (document.head.contains(script)) {
+          document.head.removeChild(script);
+        }
+      };
     }, 2000);
 
     return () => clearTimeout(timer);
@@ -149,21 +151,20 @@ const PaymentSuccess = () => {
               <p className="text-center text-slate-600 mb-6">
                 Book a time to discuss your claim with our team
               </p>
-              <div className="bg-white rounded-lg overflow-hidden" style={{ minHeight: '700px' }}>
-                <Cal
-                  namespace="claim-readiness-review"
-                  calLink="mdnexus-lkd3ut/claim-readiness-review"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    overflow: "scroll"
-                  }}
-                  config={{
-                    layout: "month_view",
-                    theme: "light"
-                  }}
+              <div className="bg-white rounded-lg overflow-hidden">
+                {/* Cal.com Inline Embed */}
+                <iframe
+                  src="https://cal.com/mdnexus-lkd3ut/claim-readiness-review?embed=true"
+                  width="100%"
+                  height="700"
+                  frameBorder="0"
+                  style={{ border: 0 }}
+                  title="Schedule Consultation"
                 />
               </div>
+              <p className="text-sm text-slate-500 mt-4 text-center">
+                Having trouble? <a href="https://cal.com/mdnexus-lkd3ut/claim-readiness-review" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">Open in new window</a>
+              </p>
             </div>
           )}
 
