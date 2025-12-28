@@ -25,6 +25,8 @@ const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
 const PaymentCanceled = lazy(() => import('./pages/PaymentCanceled'));
 const TestPayment = lazy(() => import('./pages/TestPayment'));
 const ClaimReadinessReview = lazy(() => import('./pages/ClaimReadinessReview'));
+const Diagnostic = lazy(() => import('./pages/Diagnostic'));
+const DiagnosticResults = lazy(() => import('./pages/DiagnosticResults'));
 const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const Disclaimer = lazy(() => import('./pages/Disclaimer'));
@@ -83,6 +85,8 @@ function App() {
           <Route path="payment/canceled" element={<PaymentCanceled />} />
           <Route path="test-payment" element={<TestPayment />} />
           <Route path="claim-readiness-review" element={<ClaimReadinessReview />} />
+          <Route path="diagnostic" element={<Diagnostic />} />
+          <Route path="diagnostic/results/:sessionId" element={<DiagnosticResults />} />
           <Route path="terms" element={<TermsAndConditions />} />
           <Route path="privacy" element={<PrivacyPolicy />} />
           <Route path="disclaimer" element={<Disclaimer />} />
