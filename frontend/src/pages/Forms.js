@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Send, Upload, X, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
+import Cal, { getCalApi } from "@calcom/embed-react";
 import SEO from '../components/SEO';
 import SuccessModal from '../components/SuccessModal';
 import { submitGenericForm, fileUploadApi, formSubmissionsApi } from '../lib/api';
@@ -35,22 +36,17 @@ const Forms = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showCal, setShowCal] = useState(initialView);
   
-  const calUrl = process.env.REACT_APP_CAL_URL_DISCOVERY || 'https://cal.com/mdnexus-lkd3ut/discovery-call';
-  
-  // Load Cal.com widget script
+  // Initialize Cal.com API
   useEffect(() => {
     if (showCal) {
-      const script = document.createElement('script');
-      script.src = 'https://app.cal.com/embed/embed.js';
-      script.async = true;
-      document.body.appendChild(script);
-      
-      return () => {
-        // Cleanup script on unmount
-        if (document.body.contains(script)) {
-          document.body.removeChild(script);
-        }
-      };
+      (async function () {
+        const cal = await getCalApi({ namespace: "discovery-call" });
+        cal("ui", {
+          theme: "light",
+          hideEventTypeDetails: false,
+          layout: "month_view"
+        });
+      })();
     }
   }, [showCal]);
   
@@ -202,17 +198,21 @@ const Forms = () => {
               <p className="text-slate-600 mb-6">
                 Book a consultation to discuss your VA claim needs. We'll help you understand which services are right for you.
               </p>
-              <div className="bg-white rounded-lg overflow-hidden">
-                {/* Cal.com Inline Widget */}
-                <div 
-                  data-cal-link={calUrl}
-                  data-cal-config='{"layout":"month_view"}'
-                  style={{ minWidth: '320px', height: '700px', overflow: 'scroll' }}
-                ></div>
+              <div className="bg-white rounded-lg overflow-hidden" style={{ minHeight: '700px' }}>
+                <Cal
+                  namespace="discovery-call"
+                  calLink="mdnexus-lkd3ut/discovery-call"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    overflow: "scroll"
+                  }}
+                  config={{
+                    layout: "month_view",
+                    theme: "light"
+                  }}
+                />
               </div>
-              <p className="text-sm text-slate-500 mt-4 text-center">
-                Having trouble? <a href={calUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">Open in new window</a>
-              </p>
             </div>
           ) : (
             <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/40">

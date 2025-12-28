@@ -1,30 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { CheckCircle, Mail, Clock, FileText, ArrowRight, Calendar } from 'lucide-react';
+import Cal, { getCalApi } from "@calcom/embed-react";
 import SEO from '../components/SEO';
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
   const [showCal, setShowCal] = useState(false);
-  const calUrl = process.env.REACT_APP_CAL_URL_CONSULTATION || 'https://cal.com/mdnexus-lkd3ut/claim-readiness-review';
 
-  // Load Cal.com widget script and show after delay
+  // Initialize Cal.com API and show after delay
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowCal(true);
       
-      // Load Cal.com embed script
-      const script = document.createElement('script');
-      script.src = 'https://app.cal.com/embed/embed.js';
-      script.async = true;
-      document.body.appendChild(script);
-      
-      return () => {
-        if (document.body.contains(script)) {
-          document.body.removeChild(script);
-        }
-      };
+      (async function () {
+        const cal = await getCalApi({ namespace: "claim-readiness-review" });
+        cal("ui", {
+          theme: "light",
+          hideEventTypeDetails: false,
+          layout: "month_view"
+        });
+      })();
     }, 2000);
 
     return () => clearTimeout(timer);
@@ -152,17 +149,21 @@ const PaymentSuccess = () => {
               <p className="text-center text-slate-600 mb-6">
                 Book a time to discuss your claim with our team
               </p>
-              <div className="bg-white rounded-lg overflow-hidden">
-                {/* Cal.com Inline Widget */}
-                <div 
-                  data-cal-link={calUrl}
-                  data-cal-config='{"layout":"month_view"}'
-                  style={{ minWidth: '320px', height: '700px', overflow: 'scroll' }}
-                ></div>
+              <div className="bg-white rounded-lg overflow-hidden" style={{ minHeight: '700px' }}>
+                <Cal
+                  namespace="claim-readiness-review"
+                  calLink="mdnexus-lkd3ut/claim-readiness-review"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    overflow: "scroll"
+                  }}
+                  config={{
+                    layout: "month_view",
+                    theme: "light"
+                  }}
+                />
               </div>
-              <p className="text-sm text-slate-500 mt-4 text-center">
-                Having trouble? <a href={calUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">Open in new window</a>
-              </p>
             </div>
           )}
 
