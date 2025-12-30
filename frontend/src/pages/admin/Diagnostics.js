@@ -3,6 +3,7 @@ import { FileText, TrendingUp, Users, DollarSign, Calendar, Filter } from 'lucid
 import { supabase } from '../../lib/supabase';
 import { toast } from 'sonner';
 import { RECOMMENDATIONS } from '../../lib/diagnosticConfig';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 const Diagnostics = () => {
   const [sessions, setSessions] = useState([]);
@@ -85,7 +86,8 @@ const Diagnostics = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <AdminLayout>
+      <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -268,6 +270,7 @@ const Diagnostics = () => {
         )}
       </div>
     </div>
+    </AdminLayout>
   );
 };
 
