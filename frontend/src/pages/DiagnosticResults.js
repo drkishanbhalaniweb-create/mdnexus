@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Clock, CheckCircle, FileText, Heart, HelpCircle, Lock } from 'lucide-react';
 import SEO from '../components/SEO';
 import RecommendationCard from '../components/diagnostic/RecommendationCard';
 import AssessmentBreakdown from '../components/diagnostic/AssessmentBreakdown';
 import { getRecommendationData } from '../lib/diagnosticScoring';
+import { trackDiagnosticComplete } from '../lib/redditPixel';
 
 const DiagnosticResults = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [price, setPrice] = useState(225);
+  const hasTracked = useRef(false);
 
   // Get data from navigation state or localStorage
   const stateData = location.state;
@@ -18,6 +20,13 @@ const DiagnosticResults = () => {
     // If no state data, redirect back to diagnostic
     if (!stateData || !stateData.answers || typeof stateData.score !== 'number') {
       navigate('/diagnostic');
+      return;
+    }
+    
+    // Track diagnostic completion (only once)
+    if (!hasTracked.current && stateData.score !== undefined) {
+      trackDiagnosticComplete(stateData.score, stateData.recommendation);
+      hasTracked.current = true;
     }
   }, [stateData, navigate]);
 

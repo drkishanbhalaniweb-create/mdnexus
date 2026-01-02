@@ -4,6 +4,7 @@ import { ThumbsUp, ThumbsDown, MessageSquare, User, Clock, ArrowLeft, CheckCircl
 import { supabase } from '../lib/supabase';
 import SEO from '../components/SEO';
 import { toast } from 'sonner';
+import { trackAnswerPosted } from '../lib/redditPixel';
 
 const QuestionDetail = () => {
   const { slug } = useParams();
@@ -78,6 +79,7 @@ const QuestionDetail = () => {
       });
       await supabase.from('community_questions').update({ answers_count: (question.answers_count || 0) + 1 }).eq('id', question.id);
       toast.success('Answer posted successfully!');
+      trackAnswerPosted(question.id);
       setNewAnswer('');
       setDisplayName('');
       setUserEmail('');

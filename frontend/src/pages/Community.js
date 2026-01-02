@@ -4,6 +4,7 @@ import { MessageSquare, ThumbsUp, ThumbsDown, Eye, Search, Plus, User, Clock, Fi
 import { supabase } from '../lib/supabase';
 import SEO from '../components/SEO';
 import { toast } from 'sonner';
+import { trackQuestionAsked } from '../lib/redditPixel';
 
 const AVAILABLE_TAGS = [
   'Nexus Letter',
@@ -97,6 +98,7 @@ const Community = () => {
       }).select().single();
       if (error) throw error;
       toast.success('Question posted! You\'ll receive an email when someone answers.');
+      trackQuestionAsked(data?.id);
       setNewQuestion({ title: '', content: '', is_anonymous: false, display_name: '', user_email: '', tags: [] });
       setShowAskForm(false);
       fetchQuestions();
