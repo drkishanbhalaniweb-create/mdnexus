@@ -45,6 +45,10 @@ const Blog = () => {
         title="VA Disability Claim Resources & Guides"
         description="Expert insights, tips, and resources for your VA disability claim. Learn about nexus letters, DBQs, C&P exams, and claim strategies from medical professionals."
         keywords="VA disability blog, nexus letter guide, DBQ information, C&P exam tips, veteran resources"
+        breadcrumbs={[
+          { name: 'Home', path: '/' },
+          { name: 'Blog', path: '/blog' }
+        ]}
       />
       <div className="relative min-h-screen overflow-hidden">
       {/* Fixed Background */}

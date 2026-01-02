@@ -1,19 +1,26 @@
 import { Helmet } from 'react-helmet-async';
 
+// Production site URL - used for canonical URLs and OG tags
+const SITE_URL = 'https://www.militarydisabilitynexus.com';
+
 const SEO = ({ 
   title = 'Medical Consulting for Veterans',
   description = 'Professional medical documentation services for VA disability claims. Expert nexus letters, DBQs, and medical consultations for veterans seeking disability benefits and compensation.',
   keywords = 'VA nexus letter, DBQ, disability benefits questionnaire, aid and attendance, C&P exam, veteran medical documentation',
-  ogImage = '/og-image.jpg',
+  ogImage = '/android-chrome-512x512.png',
   article = false,
   publishedTime,
   modifiedTime,
   author = 'Military Disability Nexus',
   canonical,
-  structuredData
+  structuredData,
+  faqSchema,
+  breadcrumbs
 }) => {
-  const siteUrl = typeof window !== 'undefined' ? window.location.origin : 'https://your-site.vercel.app';
-  const currentUrl = typeof window !== 'undefined' ? window.location.href : siteUrl;
+  // Always use production URL for SEO purposes
+  const siteUrl = SITE_URL;
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
+  const currentUrl = `${siteUrl}${currentPath}`;
   const canonicalUrl = canonical || currentUrl;
 
   return (
@@ -56,6 +63,40 @@ const SEO = ({
       {structuredData && (
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
+        </script>
+      )}
+
+      {/* FAQ Schema */}
+      {faqSchema && faqSchema.length > 0 && (
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": faqSchema.map(faq => ({
+              "@type": "Question",
+              "name": faq.question,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.answer
+              }
+            }))
+          })}
+        </script>
+      )}
+
+      {/* Breadcrumb Schema */}
+      {breadcrumbs && breadcrumbs.length > 0 && (
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": breadcrumbs.map((crumb, index) => ({
+              "@type": "ListItem",
+              "position": index + 1,
+              "name": crumb.name,
+              "item": `${siteUrl}${crumb.path}`
+            }))
+          })}
         </script>
       )}
     </Helmet>

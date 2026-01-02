@@ -42,11 +42,15 @@ const Home = () => {
           "@type": "MedicalBusiness",
           "name": "Military Disability Nexus",
           "description": "Professional medical documentation services for VA disability claims",
-          "url": typeof window !== 'undefined' ? window.location.origin : 'https://militarydisabilitynexus.com',
+          "url": "https://www.militarydisabilitynexus.com",
           "telephone": "+1-307-301-2019",
           "priceRange": "$$",
-          "areaServed": "US",
-          "medicalSpecialty": "Veterans Medical Documentation"
+          "areaServed": {
+            "@type": "Country",
+            "name": "United States"
+          },
+          "medicalSpecialty": "Veterans Medical Documentation",
+          "email": "contact@militarydisabilitynexus.com"
         }}
       />
 

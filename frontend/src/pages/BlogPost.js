@@ -81,6 +81,11 @@ const BlogPost = () => {
         publishedTime={post.published_at}
         author={post.author_name}
         structuredData={structuredData}
+        breadcrumbs={[
+          { name: 'Home', path: '/' },
+          { name: 'Blog', path: '/blog' },
+          { name: post.title, path: `/blog/${slug}` }
+        ]}
       />
       <div className="bg-slate-50 min-h-screen">
       {/* Hero */}

@@ -9,6 +9,10 @@ const About = () => {
         title="About Us - Clinician-Led VA Medical Documentation"
         description="Military Disability Nexus provides clinician-led expert medical opinions for VA disability claims. Licensed professionals helping veterans nationwide with nexus letters, DBQs, and medical consultations."
         keywords="VA medical experts, clinician-led nexus letters, veteran medical documentation, licensed medical professionals"
+        breadcrumbs={[
+          { name: 'Home', path: '/' },
+          { name: 'About', path: '/about' }
+        ]}
       />
     <div className="relative min-h-screen overflow-hidden">
       {/* Fixed Background */}

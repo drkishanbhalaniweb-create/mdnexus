@@ -82,6 +82,10 @@ const Contact = () => {
         title="Contact Us - Free VA Claim Consultation"
         description="Contact Military Disability Nexus for a free consultation on your VA disability claim. Get expert guidance on nexus letters, DBQs, and medical documentation from licensed clinicians."
         keywords="VA claim consultation, contact veteran medical experts, free case review, nexus letter consultation"
+        breadcrumbs={[
+          { name: 'Home', path: '/' },
+          { name: 'Contact', path: '/contact' }
+        ]}
       />
     <div className="relative min-h-screen overflow-hidden">
       {/* Fixed Background */}

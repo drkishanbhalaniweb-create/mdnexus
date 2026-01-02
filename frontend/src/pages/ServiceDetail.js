@@ -88,6 +88,12 @@ const ServiceDetail = () => {
         description={service.short_description}
         keywords={`${service.title}, ${service.category}, VA disability, medical documentation`}
         structuredData={structuredData}
+        faqSchema={service.faqs}
+        breadcrumbs={[
+          { name: 'Home', path: '/' },
+          { name: 'Services', path: '/services' },
+          { name: service.title, path: `/services/${service.slug}` }
+        ]}
       />
       <div className="bg-slate-50 min-h-screen">
       {/* Header */}
