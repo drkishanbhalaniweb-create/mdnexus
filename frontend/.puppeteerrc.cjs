@@ -6,6 +6,8 @@ const {join} = require('path');
 module.exports = {
   // Changes the cache location for Puppeteer.
   cacheDirectory: join(__dirname, '.cache', 'puppeteer'),
-  // Specify a custom executable path for Chrome/Chromium
-  executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+  // Use system Chromium instead of bundled version
+  executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium-browser',
+  // Skip downloading Chromium
+  skipDownload: true,
 };
