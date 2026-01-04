@@ -104,6 +104,7 @@ const Home = () => {
                   onClick={() => navigate('/forms?view=schedule')}
                   className="inline-flex items-center justify-center text-center text-white px-4 sm:px-8 py-3 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base hover:shadow-lg transition-all duration-300 hover:scale-105 w-full sm:w-auto"
                   style={{ backgroundColor: '#B91C3C' }}
+                  aria-label="Book a free discovery call"
                 >
                   <span className="truncate">Free Discovery Call</span>
                 </button>
@@ -111,6 +112,7 @@ const Home = () => {
                   to="/diagnostic"
                   className="inline-flex items-center justify-center text-center bg-white px-4 sm:px-8 py-3 sm:py-3.5 rounded-lg font-semibold text-sm sm:text-base border-2 border-white/30 hover:shadow-lg transition-all duration-300 hover:scale-105 w-full sm:w-auto"
                   style={{ color: '#B91C3C' }}
+                  aria-label="Start the claim readiness diagnostic"
                 >
                   <span className="truncate">Check Claim Readiness Diagnostic</span>
                 </Link>
@@ -219,24 +221,25 @@ const Home = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service) => (
-                <div
+                <article
                   key={service.id}
-                  className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105"
+                  className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105 h-full flex flex-col"
                 >
                   <h3 className="text-xl font-bold mb-3">{service.title}</h3>
-                  <div className="text-white/80 text-sm mb-4 leading-relaxed whitespace-pre-wrap">
+                  <div className="text-white/80 text-sm mb-4 leading-relaxed whitespace-pre-wrap flex-grow">
                     {service.short_description.split('\n').map((line, i) => {
                       return line.trim() ? <p key={i} className="mb-1">{line}</p> : <br key={i} />;
                     })}
                   </div>
                   <Link
                     to={`/services/${service.slug}`}
-                    className="inline-flex items-center text-white font-semibold text-sm hover:text-navy-200 transition-colors"
+                    className="inline-flex items-center text-white font-semibold text-sm hover:text-navy-200 transition-colors mt-auto"
+                    aria-label={`Learn more about ${service.title}`}
                   >
                     <span>Learn more</span>
                     <ArrowRight className="w-4 h-4 ml-1" />
                   </Link>
-                </div>
+                </article>
               ))}
             </div>
           )}
@@ -299,40 +302,42 @@ const Home = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
               {blogPosts.map((post) => (
-                <Link
+                <article
                   key={post.id}
-                  to={`/blog/${post.slug}`}
-                  className="bg-white rounded-xl overflow-hidden border border-slate-200 hover:shadow-lg transition-all group"
+                  className="bg-white rounded-xl overflow-hidden border border-slate-200 hover:shadow-lg transition-all group h-full flex flex-col"
                 >
-                  {post.featured_image_url && (
-                    <div className="aspect-video bg-gradient-to-br from-indigo-400 to-indigo-500 overflow-hidden">
-                      <img
-                        src={post.featured_image_url}
-                        alt={post.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                  )}
-                  <div className="p-6">
-                    {post.category && (
-                      <div className="text-xs font-semibold uppercase mb-2" style={{ color: '#1e3a5f' }}>
-                        {post.category}
+                  <Link to={`/blog/${post.slug}`} className="flex flex-col h-full" aria-label={`Read article: ${post.title}`}>
+                    {post.featured_image_url && (
+                      <div className="aspect-video bg-gradient-to-br from-indigo-400 to-indigo-500 overflow-hidden">
+                        <img
+                          src={post.featured_image_url}
+                          alt={post.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                        />
                       </div>
                     )}
-                    <h3 className="text-lg font-bold text-slate-900 mb-2 transition-colors" style={{ '--tw-text-opacity': '1' }} onMouseEnter={(e) => e.currentTarget.style.color = '#1e3a5f'} onMouseLeave={(e) => e.currentTarget.style.color = '#111827'}>
-                      {post.title}
-                    </h3>
-                    <div className="text-sm text-slate-600 mb-4 line-clamp-2 whitespace-pre-wrap">
-                      {post.excerpt.split('\n').map((line, i) => {
-                        return line.trim() ? <span key={i}>{line} </span> : null;
-                      })}
+                    <div className="p-6 flex-grow flex flex-col">
+                      {post.category && (
+                        <div className="text-xs font-semibold uppercase mb-2" style={{ color: '#1e3a5f' }}>
+                          {post.category}
+                        </div>
+                      )}
+                      <h3 className="text-lg font-bold text-slate-900 mb-2 transition-colors" style={{ '--tw-text-opacity': '1' }}>
+                        {post.title}
+                      </h3>
+                      <div className="text-sm text-slate-600 mb-4 line-clamp-2 whitespace-pre-wrap flex-grow">
+                        {post.excerpt.split('\n').map((line, i) => {
+                          return line.trim() ? <span key={i}>{line} </span> : null;
+                        })}
+                      </div>
+                      <div className="flex items-center justify-between text-xs text-slate-500 mt-auto">
+                        <span>{new Date(post.published_at).toLocaleDateString()}</span>
+                        <span>{post.read_time || '5'} min read</span>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between text-xs text-slate-500">
-                      <span>{new Date(post.published_at).toLocaleDateString()}</span>
-                      <span>{post.read_time || '5'} min read</span>
-                    </div>
-                  </div>
-                </Link>
+                  </Link>
+                </article>
               ))}
             </div>
           )}
