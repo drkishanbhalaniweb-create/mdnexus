@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Linkedin, Facebook, Instagram, Mail } from 'lucide-react';
+import { Linkedin, Facebook, Instagram, Mail, Twitter, Youtube } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -12,7 +12,7 @@ const Footer = () => {
     <footer className="relative overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: 'url("/Gemini_Generated_Image_7ax9sd7ax9sd7ax9.png")',
@@ -34,13 +34,19 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-bold text-lg mb-6">Follow Us</h3>
             <div className="flex space-x-4">
-              <a href="https://www.linkedin.com/company/military-disability-nexus/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
+              <a href="https://twitter.com/MilitaryDisabilityNexus" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all" aria-label="X (formerly Twitter)">
+                <Twitter className="w-5 h-5 text-white" />
+              </a>
+              <a href="https://www.youtube.com/@MilitaryDisabilityNexus" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all" aria-label="YouTube">
+                <Youtube className="w-5 h-5 text-white" />
+              </a>
+              <a href="https://www.linkedin.com/company/military-disability-nexus/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all" aria-label="LinkedIn">
                 <Linkedin className="w-5 h-5 text-white" />
               </a>
-              <a href="https://www.facebook.com/share/1DXxUd6Q74/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
+              <a href="https://www.facebook.com/share/1DXxUd6Q74/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all" aria-label="Facebook">
                 <Facebook className="w-5 h-5 text-white" />
               </a>
-              <a href="https://www.instagram.com/military_disability_nexus?igsh=MTFtMmtvODg3NmZlMA==&utm_source=ig_contact_invite" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
+              <a href="https://www.instagram.com/military_disability_nexus?igsh=MTFtMmtvODg3NmZlMA==&utm_source=ig_contact_invite" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all" aria-label="Instagram">
                 <Instagram className="w-5 h-5 text-white" />
               </a>
             </div>
@@ -146,7 +152,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Organization Schema - Global */}
       <script type="application/ld+json">
         {JSON.stringify({

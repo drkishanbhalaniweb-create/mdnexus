@@ -51,18 +51,17 @@ const Services = () => {
       <div className="relative min-h-screen overflow-hidden">
         {/* Fixed Background Image with Glassmorphic Blur */}
         <div className="fixed inset-0 z-0 overflow-hidden">
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          <img
+            src="/wavefillservicep.png"
+            alt="Background pattern"
+            className="absolute inset-0 w-full h-full object-cover"
             style={{
-              backgroundImage: 'url("/wavefillservicep.png")',
               filter: 'blur(4px)',
-              transform: 'scale(1.1)',
-              width: '100%',
-              height: '100%'
+              transform: 'scale(1.1)'
             }}
             role="presentation"
             aria-hidden="true"
-          ></div>
+          />
           <div className="absolute inset-0 bg-white/50"></div>
         </div>
 
@@ -92,6 +91,7 @@ const Services = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  <h2 className="sr-only">Available Services</h2>
                   {services.map((service) => {
                     const IconComponent = getIconComponent(service.icon);
                     return (

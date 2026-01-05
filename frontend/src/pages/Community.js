@@ -75,7 +75,7 @@ const Community = () => {
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(newQuestion.user_email)) { toast.error('Please provide a valid email address'); return; }
-    
+
     // Check word count if content is provided
     if (newQuestion.content.trim()) {
       const wordCount = getWordCount(newQuestion.content);
@@ -84,10 +84,10 @@ const Community = () => {
         return;
       }
     }
-    
+
     setSubmitting(true);
     try {
-      const { data, error} = await supabase.from('community_questions').insert({
+      const { data, error } = await supabase.from('community_questions').insert({
         user_id: user?.id || '00000000-0000-0000-0000-000000000000', // Use dummy UUID if no user
         title: newQuestion.title.trim(),
         content: newQuestion.content.trim(),
@@ -165,18 +165,17 @@ const Community = () => {
       <div className="relative min-h-screen overflow-hidden">
         {/* Fixed Background */}
         <div className="fixed inset-0 z-0 overflow-hidden">
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          <img
+            src="/blogimg.png"
+            alt="Background pattern"
+            className="absolute inset-0 w-full h-full object-cover"
             style={{
-              backgroundImage: 'url("/blogimg.png")',
               filter: 'blur(4px)',
-              transform: 'scale(1.1)',
-              width: '100%',
-              height: '100%'
+              transform: 'scale(1.1)'
             }}
             role="presentation"
             aria-hidden="true"
-          ></div>
+          />
           <div className="absolute inset-0 bg-white/50"></div>
         </div>
 
@@ -221,11 +220,10 @@ const Community = () => {
                   <button
                     key={tag}
                     onClick={() => handleFilterTagToggle(tag)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                      selectedTags.includes(tag)
-                        ? 'bg-navy-600 text-white'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${selectedTags.includes(tag)
+                      ? 'bg-navy-600 text-white'
+                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                      }`}
                   >
                     {tag}
                   </button>
@@ -260,14 +258,13 @@ const Community = () => {
                             {getWordCount(newQuestion.content)}/200 words
                           </span>
                         </div>
-                        <textarea 
-                          value={newQuestion.content} 
-                          onChange={(e) => setNewQuestion({ ...newQuestion, content: e.target.value })} 
-                          placeholder="Provide more details..." 
-                          rows={5} 
-                          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none ${
-                            getWordCount(newQuestion.content) > 200 ? 'border-red-300' : 'border-slate-200'
-                          }`}
+                        <textarea
+                          value={newQuestion.content}
+                          onChange={(e) => setNewQuestion({ ...newQuestion, content: e.target.value })}
+                          placeholder="Provide more details..."
+                          rows={5}
+                          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none ${getWordCount(newQuestion.content) > 200 ? 'border-red-300' : 'border-slate-200'
+                            }`}
                         />
                       </div>
                       <div className="mb-4">
@@ -279,13 +276,13 @@ const Community = () => {
                           Email <span className="text-red-600">*</span>
                           <span className="text-xs text-slate-500 ml-2">(for notifications only, not displayed publicly)</span>
                         </label>
-                        <input 
-                          type="email" 
-                          value={newQuestion.user_email} 
-                          onChange={(e) => setNewQuestion({ ...newQuestion, user_email: e.target.value })} 
-                          placeholder="your@email.com" 
-                          className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none" 
-                          required 
+                        <input
+                          type="email"
+                          value={newQuestion.user_email}
+                          onChange={(e) => setNewQuestion({ ...newQuestion, user_email: e.target.value })}
+                          placeholder="your@email.com"
+                          className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none"
+                          required
                         />
                         <p className="text-xs text-slate-500 mt-1">We'll notify you when someone answers your question</p>
                       </div>
@@ -297,11 +294,10 @@ const Community = () => {
                               key={tag}
                               type="button"
                               onClick={() => handleTagToggle(tag)}
-                              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                                (newQuestion.tags || []).includes(tag)
-                                  ? 'bg-navy-600 text-white'
-                                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                              }`}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${(newQuestion.tags || []).includes(tag)
+                                ? 'bg-navy-600 text-white'
+                                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                                }`}
                             >
                               {tag}
                             </button>
@@ -335,19 +331,20 @@ const Community = () => {
               </div>
             ) : (
               <div className="space-y-4">
+                <h2 className="sr-only">Recent Discussions</h2>
                 {filteredQuestions.map((question) => (
-                  <div key={question.id} className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/40 hover:shadow-2xl transition-all p-6">
+                  <article key={question.id} className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/40 hover:shadow-2xl transition-all p-6">
                     <div className="flex gap-4">
                       {/* Vote buttons - Left side (Desktop) */}
                       <div className="hidden sm:flex flex-col items-center gap-1 text-center min-w-[50px]">
-                        <button 
+                        <button
                           onClick={(e) => handleVote(e, question.id, 'up', question.upvotes)}
                           className="p-1 text-slate-400 hover:text-emerald-600 transition-colors rounded hover:bg-emerald-50"
                         >
                           <ThumbsUp className="w-5 h-5" />
                         </button>
                         <span className="text-lg font-semibold text-slate-700">{(question.upvotes || 0) - (question.downvotes || 0)}</span>
-                        <button 
+                        <button
                           onClick={(e) => handleVote(e, question.id, 'down', question.downvotes)}
                           className="p-1 text-slate-400 hover:text-red-600 transition-colors rounded hover:bg-red-50"
                         >
@@ -395,7 +392,7 @@ const Community = () => {
                         <span className="text-xs">answers</span>
                       </div>
                     </div>
-                  </div>
+                  </article>
                 ))}
               </div>
             )}
