@@ -79,18 +79,21 @@ const QuickIntakeForm = ({ onSuccess }) => {
     setLoading(true);
 
     try {
-      // Submit form
+      // Submit form - use 'quick_intake' as formType (allowed by database CHECK constraint)
+      // Store selected services in form_data
       const submission = await formSubmissionsApi.submit({
-        formType: formData.formTypes.length > 0 ? formData.formTypes[0] : 'unsure', // Use first selected or 'unsure'
+        formType: 'quick_intake', // Fixed: database only allows 'quick_intake', 'aid_attendance', 'unsure', 'general'
         fullName: formData.fullName,
         email: formData.email,
         phone: formData.phone,
         formData: {
           briefSummary: formData.briefSummary,
-          selectedServices: formData.formTypes, // Store all selected services
+          selectedServices: formData.formTypes, // Store all selected services here
+          rushService: formData.rushService,
         },
         requiresUpload,
       });
+
 
       // Upload files if any
       if (selectedFiles.length > 0) {
@@ -100,7 +103,7 @@ const QuickIntakeForm = ({ onSuccess }) => {
       }
 
       setShowSuccessModal(true);
-      
+
       if (onSuccess) {
         onSuccess(submission);
       }

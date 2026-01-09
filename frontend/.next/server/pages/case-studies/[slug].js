@@ -1,0 +1,11 @@
+var R=require("../../chunks/ssr/[turbopack]_runtime.js")("server/pages/case-studies/[slug].js")
+R.c("server/chunks/ssr/frontend_a65a210e._.js")
+R.c("server/chunks/ssr/frontend_src_components_Layout_ae0e4092.js")
+R.c("server/chunks/ssr/[root-of-the-server]__09af70f1._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__d4e3a59a._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__fd7bdb88._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__4a0f1acf._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__d7846fdf._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__fa4851f5._.js")
+R.m(22569)
+module.exports=R.m(22569).exports

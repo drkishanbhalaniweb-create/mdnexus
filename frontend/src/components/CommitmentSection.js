@@ -1,10 +1,10 @@
-import { useLocation } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 const CommitmentSection = () => {
-  const location = useLocation();
-  
+  const router = useRouter();
+
   // Only show on the home page
-  const isHomePage = location.pathname === '/';
+  const isHomePage = router.pathname === '/';
 
   // Don't render anything if not on home page
   if (!isHomePage) {
@@ -28,7 +28,7 @@ const CommitmentSection = () => {
               Thank you for your service. It's our privilege to support you in return.
             </p>
           </div>
-          
+
           {/* Disclaimer */}
           <p className="text-xs text-slate-500 text-center leading-relaxed mt-8 max-w-4xl mx-auto">
             Military Disability Nexus is not affiliated with the Department of Veterans Affairs (VA) and does not provide legal advice, legal representation, or claim-filing services. We do not act as an accredited VSO, claims agent, or attorney, and we do not communicate with the VA on your behalf.

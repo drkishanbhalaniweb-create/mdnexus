@@ -1,10 +1,11 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabase';
-import { 
-  LayoutDashboard, 
-  FileText, 
-  Briefcase, 
-  MessageSquare, 
+import {
+  LayoutDashboard,
+  FileText,
+  Briefcase,
+  MessageSquare,
   LogOut,
   Menu,
   X,
@@ -18,8 +19,7 @@ import { toast } from 'sonner';
 import { useState, useEffect } from 'react';
 
 const AdminLayout = ({ children }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
@@ -52,7 +52,7 @@ const AdminLayout = ({ children }) => {
     try {
       await supabase.auth.signOut();
       toast.success('Logged out successfully');
-      navigate('/admin/login');
+      router.push('/admin/login');
     } catch (error) {
       console.error('Logout error:', error);
       toast.error('Logout failed');
@@ -71,7 +71,7 @@ const AdminLayout = ({ children }) => {
     ...(isSuperAdmin ? [{ name: 'Admin Users', href: '/admin/users', icon: Users }] : []),
   ];
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => router.pathname === path;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -87,12 +87,11 @@ const AdminLayout = ({ children }) => {
               return (
                 <Link
                   key={item.name}
-                  to={item.href}
-                  className={`group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors ${
-                    isActive(item.href)
+                  href={item.href}
+                  className={`group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors ${isActive(item.href)
                       ? 'bg-indigo-800 text-white'
                       : 'text-indigo-100 hover:bg-indigo-600 hover:text-white'
-                  }`}
+                    }`}
                 >
                   <Icon className="mr-3 h-5 w-5" />
                   {item.name}
@@ -134,13 +133,12 @@ const AdminLayout = ({ children }) => {
               return (
                 <Link
                   key={item.name}
-                  to={item.href}
+                  href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`group flex items-center px-3 py-3 text-sm font-medium rounded-lg ${
-                    isActive(item.href)
+                  className={`group flex items-center px-3 py-3 text-sm font-medium rounded-lg ${isActive(item.href)
                       ? 'bg-indigo-800 text-white'
                       : 'text-indigo-100 hover:bg-indigo-600 hover:text-white'
-                  }`}
+                    }`}
                 >
                   <Icon className="mr-3 h-5 w-5" />
                   {item.name}

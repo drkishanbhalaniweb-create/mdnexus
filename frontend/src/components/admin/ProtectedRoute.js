@@ -1,25 +1,38 @@
 import { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabase';
 
 const ProtectedRoute = ({ children }) => {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     // Check current session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
       setLoading(false);
-    });
+
+      if (!currentUser) {
+        router.replace('/admin/login');
+      }
+    };
+
+    checkSession();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      if (!currentUser && !loading) {
+        router.replace('/admin/login');
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [router, loading]);
 
   if (loading) {
     return (
@@ -30,7 +43,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!user) {
-    return <Navigate to="/admin/login" replace />;
+    return null; // or a loading spinner while redirecting
   }
 
   return children;

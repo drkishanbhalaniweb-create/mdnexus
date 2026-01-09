@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
 
 // Production site URL - used for canonical URLs and OG tags
 const SITE_URL = 'https://www.militarydisabilitynexus.com';
@@ -19,9 +19,11 @@ const SEO = ({
 }) => {
   // Always use production URL for SEO purposes
   const siteUrl = SITE_URL;
-  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
-  const currentUrl = `${siteUrl}${currentPath}`;
-  const canonicalUrl = canonical || currentUrl;
+  // In Next.js SSR, window might be undefined initially, but Head handles it.
+  // For canonical, we can rely on the passed canonical or default to siteUrl.
+  // Ideally, we pass the current path from the parent page or use useRouter, 
+  // but for now, we'll rely on the default or prop.
+  const canonicalUrl = canonical || siteUrl;
 
   // Truncate description to 130 characters to avoid SEO penalties
   const metaDescription = description.length > 130
@@ -29,7 +31,7 @@ const SEO = ({
     : description;
 
   return (
-    <Helmet>
+    <Head>
       {/* Basic Meta Tags */}
       <title>{title} | Military Disability Nexus</title>
       <meta name="description" content={metaDescription} />
@@ -66,45 +68,52 @@ const SEO = ({
 
       {/* Structured Data (JSON-LD) */}
       {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       )}
 
       {/* FAQ Schema */}
       {faqSchema && faqSchema.length > 0 && (
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": faqSchema.map(faq => ({
-              "@type": "Question",
-              "name": faq.question,
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": faq.answer
-              }
-            }))
-          })}
-        </script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": faqSchema.map(faq => ({
+                "@type": "Question",
+                "name": faq.question,
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": faq.answer
+                }
+              }))
+            })
+          }}
+        />
       )}
 
       {/* Breadcrumb Schema */}
       {breadcrumbs && breadcrumbs.length > 0 && (
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": breadcrumbs.map((crumb, index) => ({
-              "@type": "ListItem",
-              "position": index + 1,
-              "name": crumb.name,
-              "item": `${siteUrl}${crumb.path}`
-            }))
-          })}
-        </script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": breadcrumbs.map((crumb, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "name": crumb.name,
+                "item": `${siteUrl}${crumb.path}`
+              }))
+            })
+          }}
+        />
       )}
-    </Helmet>
+    </Head>
   );
 };
 

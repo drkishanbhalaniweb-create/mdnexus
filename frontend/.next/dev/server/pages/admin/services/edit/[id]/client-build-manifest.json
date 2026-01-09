@@ -1,0 +1,5 @@
+{
+  "/admin/services/edit/[id]": [
+    "static/chunks/pages/admin/services/edit/[id].js"
+  ]
+}

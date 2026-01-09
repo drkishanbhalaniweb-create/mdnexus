@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import { Linkedin, Facebook, Instagram, Mail, Twitter, Youtube } from 'lucide-react';
+import Link from 'next/link';
+import { Linkedin, Facebook, Instagram, Mail } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -34,12 +34,7 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-bold text-lg mb-6">Follow Us</h3>
             <div className="flex space-x-4">
-              <a href="https://twitter.com/MilitaryDisabilityNexus" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all" aria-label="X (formerly Twitter)">
-                <Twitter className="w-5 h-5 text-white" />
-              </a>
-              <a href="https://www.youtube.com/@MilitaryDisabilityNexus" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all" aria-label="YouTube">
-                <Youtube className="w-5 h-5 text-white" />
-              </a>
+
               <a href="https://www.linkedin.com/company/military-disability-nexus/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all" aria-label="LinkedIn">
                 <Linkedin className="w-5 h-5 text-white" />
               </a>
@@ -57,32 +52,32 @@ const Footer = () => {
             <h3 className="text-white font-bold text-lg mb-6">Get Started</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link to="/services/claim-readiness-review" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
+                <Link href="/services/claim-readiness-review" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
                   Claim Readiness Review
                 </Link>
               </li>
               <li>
-                <Link to="/services/independent-medical-opinion-nexus-letter" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
+                <Link href="/services/independent-medical-opinion-nexus-letter" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
                   Nexus Letter/IMO
                 </Link>
               </li>
               <li>
-                <Link to="/services/disability-benefits-questionnaire-dbq" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
+                <Link href="/services/disability-benefits-questionnaire-dbq" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
                   DBQ
                 </Link>
               </li>
               <li>
-                <Link to="/services/aid-and-attendance" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
+                <Link href="/services/aid-and-attendance" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
                   Aid & Attendance Claims
                 </Link>
               </li>
               <li>
-                <Link to="/services/va-medical-malpractice-1151-case" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
+                <Link href="/services/va-medical-malpractice-1151-case" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
                   1151 Claims
                 </Link>
               </li>
               <li>
-                <Link to="/services/cp-coaching" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
+                <Link href="/services/cp-coaching" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
                   C&P Exam Preparation
                 </Link>
               </li>
@@ -94,27 +89,32 @@ const Footer = () => {
             <h3 className="text-white font-bold text-lg mb-6">About</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link to="/blog" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
+                <Link href="/about" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
                   Blogs
                 </Link>
               </li>
               <li>
-                <Link to="/community" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
+                <Link href="/community" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
                   Community Q&A
                 </Link>
               </li>
               <li>
-                <Link to="/case-studies" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
+                <Link href="/case-studies" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
                   Case Studies
                 </Link>
               </li>
               <li>
-                <Link to="/contact" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
+                <Link href="/contact" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
                   Contact
                 </Link>
               </li>
               <li>
-                <Link to="/forms" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
+                <Link href="/forms" onClick={handleLinkClick} className="text-white/80 hover:text-white transition-colors">
                   Forms
                 </Link>
               </li>
@@ -132,21 +132,21 @@ const Footer = () => {
               Professional medical documentation for VA disability claims | Nexus Letters | DBQs | Aid & Attendance
             </p>
             <div className="flex justify-center space-x-4 text-xs">
-              <Link to="/terms" onClick={handleLinkClick} className="text-white/50 hover:text-white/80 transition-colors">
+              <Link href="/terms" onClick={handleLinkClick} className="text-white/50 hover:text-white/80 transition-colors">
                 Terms & Conditions
               </Link>
               <span className="text-white/30">|</span>
-              <Link to="/privacy" onClick={handleLinkClick} className="text-white/50 hover:text-white/80 transition-colors">
+              <Link href="/privacy" onClick={handleLinkClick} className="text-white/50 hover:text-white/80 transition-colors">
                 Privacy Policy
               </Link>
               <span className="text-white/30">|</span>
-              <Link to="/disclaimer" onClick={handleLinkClick} className="text-white/50 hover:text-white/80 transition-colors">
+              <Link href="/disclaimer" onClick={handleLinkClick} className="text-white/50 hover:text-white/80 transition-colors">
                 Disclaimer
               </Link>
             </div>
           </div>
           <div className="text-center">
-            <Link to="/admin/login" onClick={handleLinkClick} className="text-white/20 hover:text-white/40 transition-colors text-xs inline-block">
+            <Link href="/admin/login" onClick={handleLinkClick} className="text-white/20 hover:text-white/40 transition-colors text-xs inline-block">
               Admin
             </Link>
           </div>

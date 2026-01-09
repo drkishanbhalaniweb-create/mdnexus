@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Logo from './Logo';
@@ -6,7 +7,7 @@ import Logo from './Logo';
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,7 +17,7 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => router.pathname === path;
 
   const navLinks = [
     { name: 'Services', path: '/services' },
@@ -28,22 +29,19 @@ const Header = () => {
   ];
 
   return (
-    <header className={`sticky top-0 z-50 backdrop-blur-xl border-b transition-all duration-300 ${
-      scrolled 
-        ? 'bg-white/70 border-slate-200/50 shadow-lg' 
-        : 'bg-white/50 border-white/20'
-    }`}>
+    <header className={`sticky top-0 z-50 backdrop-blur-xl border-b transition-all duration-300 ${scrolled
+      ? 'bg-white/70 border-slate-200/50 shadow-lg'
+      : 'bg-white/50 border-white/20'
+      }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`flex justify-between items-center transition-all duration-300 ${
-          scrolled ? 'h-20' : 'h-24'
-        }`}>
+        <div className={`flex justify-between items-center transition-all duration-300 ${scrolled ? 'h-20' : 'h-24'
+          }`}>
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-4 group" data-testid="header-logo">
+          <Link href="/" className="flex items-center gap-4 group" data-testid="header-logo">
             <Logo className={`transition-all duration-300 ${scrolled ? 'w-24 h-24' : 'w-32 h-32'}`} />
             <div>
-              <div className={`font-bold text-slate-900 transition-all duration-300 ${
-                scrolled ? 'text-base' : 'text-lg'
-              }`}>Military Disability Nexus</div>
+              <div className={`font-bold text-slate-900 transition-all duration-300 ${scrolled ? 'text-base' : 'text-lg'
+                }`}>Military Disability Nexus</div>
               {!scrolled && (
                 <div className="text-sm text-slate-500 transition-opacity duration-300">
                   Clinician-led expert medical opinions for VA disability claims
@@ -57,13 +55,12 @@ const Header = () => {
             {navLinks.map((link) => (
               <Link
                 key={link.path}
-                to={link.path}
+                href={link.path}
                 data-testid={`nav-${link.name.toLowerCase()}`}
-                className={`text-sm font-medium transition-colors ${
-                  isActive(link.path)
-                    ? 'text-slate-900'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+                className={`text-sm font-medium transition-colors ${isActive(link.path)
+                  ? 'text-slate-900'
+                  : 'text-slate-600 hover:text-slate-900'
+                  }`}
               >
                 {link.name}
               </Link>
@@ -72,7 +69,7 @@ const Header = () => {
 
           {/* CTA Button */}
           <Link
-            to="/contact"
+            href="/contact"
             data-testid="header-cta-button"
             className="hidden md:flex items-center space-x-2 text-white px-6 py-2.5 rounded-lg font-semibold transition-all hover:opacity-90"
             style={{ backgroundColor: '#B91C3C' }}
@@ -98,19 +95,18 @@ const Header = () => {
             {navLinks.map((link) => (
               <Link
                 key={link.path}
-                to={link.path}
+                href={link.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block py-2 text-base font-medium transition-colors ${
-                  isActive(link.path)
-                    ? 'text-slate-900'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+                className={`block py-2 text-base font-medium transition-colors ${isActive(link.path)
+                  ? 'text-slate-900'
+                  : 'text-slate-600 hover:text-slate-900'
+                  }`}
               >
                 {link.name}
               </Link>
             ))}
             <Link
-              to="/contact"
+              href="/contact"
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center justify-center space-x-2 text-white px-6 py-3 rounded-lg font-semibold w-full"
               style={{ backgroundColor: '#B91C3C' }}

@@ -1,0 +1,3 @@
+{
+  "/services/[slug]": "pages/services/[slug].js"
+}
