@@ -1,21 +1,21 @@
 {
   "buildCommand": "cd frontend && npm install && npm run build",
-  "outputDirectory": "frontend/build",
-  "devCommand": "cd frontend && npm start",
+  "devCommand": "cd frontend && npm run dev",
   "installCommand": "cd frontend && npm install",
-  "framework": "create-react-app",
-
+  "framework": "nextjs",
   "redirects": [
     {
       "source": "/:path*",
       "has": [
-        { "type": "host", "value": "militarydisabilitynexus.com" }
+        {
+          "type": "host",
+          "value": "militarydisabilitynexus.com"
+        }
       ],
       "destination": "https://www.militarydisabilitynexus.com/:path*",
       "permanent": true
     }
   ],
-
   "rewrites": [
     {
       "source": "/sitemap.xml",
@@ -24,13 +24,8 @@
     {
       "source": "/robots.txt",
       "destination": "/robots.txt"
-    },
-    {
-      "source": "/:path*",
-      "destination": "/index.html"
     }
   ],
-
   "headers": [
     {
       "source": "/static/(.*)",

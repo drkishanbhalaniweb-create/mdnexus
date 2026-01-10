@@ -6,14 +6,15 @@ const nextConfig = {
     // We will strictly migrate to NEXT_PUBLIC_, so we don't need env mappings here unless strictly necessary.
 
     images: {
-        domains: [
-            'images.unsplash.com',
-            'source.unsplash.com',
-            // Add Supabase storage domain if needed, usually just the project URL host
-            // e.g. "xyz.supabase.co"
-        ],
-        // Allow Supabase patterns if you use the full URL in images
         remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'images.unsplash.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'source.unsplash.com',
+            },
             {
                 protocol: 'https',
                 hostname: '**',
